@@ -4,24 +4,61 @@
 import random
 import turtle
 from scipy import spatial
+import time
 
 pen = turtle.Turtle()
+turtle.setup(width=1.0, height=1.0)
 turtle.delay(0)
 pen.ht()
 turtle.colormode(255)
 turtle.tracer(0,0)
 
+def draw():
 
+    column = 80
+    row = 60
+    space = 10
+    mode = "square"     #"square","triangle","random"
+    num_of_steps = 100
+    num_of_walks = 10
+    begin = 2
+    name = "Sqaure with Second Average5"
+    Pdown = 0.25
+    Pup  = 0.25
+    Pright = 0.25
+    Pleft = 0.25
+    Prightdown = 0.10
+    Prightup = 0.10
+    Pleftdown = 0.10
+    Pleftup = 0.10
+    
+    coordinates = []
+    # coordinates_dict = NearestDict(2)
+
+    turtle.bgcolor("grey")
+    start = time.time() 
+    grid(column,row,space,mode, coordinates)
+
+    if mode.lower() == "square" or mode.lower() == "triangle":
+        drawLines(num_of_walks, num_of_steps, column, row, space, mode, begin, Pright, Pleft, Pdown, Pup, Prightdown, Prightup, Pleftdown, Pleftup)
+    elif mode.lower() == "random":
+       drawLinesRandom(num_of_walks, num_of_steps, column, row, space, begin,coordinates, Pright, Pleft, Pdown, Pup)
+##    saveFrame("Walk_{}.png".format(name))
+
+    end = time.time()
+    print("The program took:",round(end-start,2)," seconds to run")
+    turtle.update()
+      
 def setup():
     fullScreen()
     noLoop()
     
 
-def point(x,y):
+def point(x,y,psize):
     pen.up()
     pen.goto(x,y)
     pen.down()
-    pen.dot()
+    pen.dot(psize)
     
 
 def line(x1,y1,x2,y2):
@@ -43,11 +80,12 @@ def rect(x1,y1,len_th_1,len_th_2):
         pen.right(90)
         pen.forward(len_th_2)
         pen.right(90)
-    pen.up()
     
 
-def traingle():
-    pass
+def triangle(x1,y1,x2,y2,x3,y3):
+    line(x1,y1,x2,y2)
+    line(x2,y2,x3,y3)
+    line(x1,y1,x3,y3)
 
 def stroke(r,g,b):
     col = (r,g,b)
@@ -78,11 +116,9 @@ def grid(col, row, len_th, mode, coordinates):
         for i in range(col*row):
             x = random.randint(x1,x1+(col*len_th))
             y = random.randint(y1, y1+(row*len_th))
-            pen.pensize(2)
-            point(x,y)
-            pen.pensize(1)
+            y -= (row*len_th)
+            point(x,y,3)
             coordinates.append([x,y])
-            print("Done")
             # coordinates_dict[x,y] = i
         return coordinates
         # return coordinates_dict
@@ -93,7 +129,8 @@ def grid(col, row, len_th, mode, coordinates):
                 if mode.lower() == "square":
                     rect(x,y,len_th,len_th)
                 elif mode.lower() == "triangle":
-                    triangle(x,y,x+len_th,y,x+(len_th/2),y+len_th)
+                    triangle(x,y-len_th,x+len_th,y-len_th,x+(len_th/2),y)
+                    pen.seth(0)
                 x += len_th
             y -= len_th
             if mode.lower() == "square":
@@ -129,42 +166,47 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, Pright, Pleft, 
     xaverage_array = []
     yaverage_array = []
     avg = []
+    width = turtle.window_width()
+    height = turtle.window_height()
     
     if mode.lower() == "square":
         
         for num in range(walk_num):
             
             if begin == 1:#start at centre 
-                x = (displayWidth/2)
+                x = 0
     
             elif begin == 2:#start at left 
-                x = (displayWidth/2) - ((col/2)*len_th)
+                x = (0) - ((col/2)*len_th)
+
             
             elif begin == 3: #start at right
-                x = (displayWidth/2) + ((col/2)*len_th)
+                x = (0) + ((col/2)*len_th)
+
                 
             xpos = x
-            y = (displayHeight/2)
+            y = 0
+            ypos = y
             
                     
             for j in range(step_num):
                 
-                if x == ((displayWidth/2) - ((col/2)*len_th)) and y == ((displayHeight/2) - ((row/2)*len_th)):#this prevent the line going off the grid
+                if x == ((0) - ((col/2)*len_th)) and y == ((0) - ((row/2)*len_th)):#this prevent the line going off the grid
                     numbers = [0,2]
-                elif x == ((displayWidth/2) - ((col/2)*len_th)) and y ==  ((displayHeight/2) + ((row/2)*len_th)):
+                elif x == ((0) - ((col/2)*len_th)) and y ==  ((0) + ((row/2)*len_th)):
                     numbers = [0,3]
-                elif x == ((displayWidth/2) + ((col/2)*len_th)) and y == ((displayHeight/2) - ((row/2)*len_th)):#these are the corners
+                elif x == ((0) + ((col/2)*len_th)) and y == ((0) - ((row/2)*len_th)):#these are the corners
                     numbers = [1,2]
-                elif x == ((displayWidth/2) + ((col/2)*len_th)) and y == ((displayHeight/2) + ((row/2)*len_th)):
+                elif x == ((0) + ((col/2)*len_th)) and y == ((0) + ((row/2)*len_th)):
                     numbers = [1,3]
                     
-                elif x == ((displayWidth/2) - ((col/2)*len_th)):#these are the edges
+                elif x == ((0) - ((col/2)*len_th)):#these are the edges
                     numbers = [0,2,3]
-                elif y == ((displayHeight/2) - ((row/2)*len_th)):
+                elif y == ((0) - ((row/2)*len_th)):
                     numbers = [0,1,2]
-                elif x == ((displayWidth/2) + ((col/2)*len_th)):
+                elif x == ((0) + ((col/2)*len_th)):
                     numbers = [1,2,3]
-                elif y == ((displayHeight/2) + ((row/2)*len_th)):
+                elif y == ((0) + ((row/2)*len_th)):
                     numbers = [0,1,3]
                 else:
                     numbers = [0,1,2,3]
@@ -186,8 +228,8 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, Pright, Pleft, 
                             weights.append(3)
                     
                 number = random.choice(weights)#generates a random number
-                stroke(0)
-                pen.pensize(2)(3)
+                stroke(0,0,0)
+                pen.pensize(2)
                 if number == 0:
                     line(x,y,x+len_th,y)#right
                     x += len_th
@@ -202,54 +244,54 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, Pright, Pleft, 
                     y -= len_th
 
                 avg.append([x,y])
-
-            print("Average = ",avg)
+                print(num+1)
+                ##            print("Average = ",avg)
             
-            stroke(0)
-            pen.pensize(2)(3)
-            point(x,y)
+##            stroke(0,0,0)
+####            pen.pensize(2)(3)
+##            point(x,y,2)
             xaverage_array.append(x)
             yaverage_array.append(y)
     
 ##            fill(0,0,0)
 ##            textSize(10)
-##            text(num+1,x,y)#writes a number to link the line to the walk_num
+            pen.write(num+1, font=("arial",8,"normal"))#writes a number to link the line to the walk_num
     
     elif mode.lower() == "triangle":
         
         for num in range(walk_num):
             
             if begin == 1:#start at centre 
-                x = (displayWidth/2)
+                x = (0)
     
             elif begin == 2:#start at left 
-                x = (displayWidth/2) - ((col/2)*len_th)
+                x = (0) - ((col/2)*len_th)
             
             elif begin == 3: #start at right
-                x = (displayWidth/2) + ((col/2)*len_th)
+                x = (0) + ((col/2)*len_th)
                 
             xpos = x
-            y = (displayHeight/2)
+            y = (0)-(col*len_th)
             
                     
             for j in range(step_num):
                 
-                if x == ((displayWidth/2) - ((col/2)*len_th)) and y == ((displayHeight/2) - ((row/2)*len_th)):#this prevent the line going off the grid
+                if x == ((0) - ((col/2)*len_th)) and y == ((0) - ((row/2)*len_th)):#this prevent the line going off the grid
                     numbers = [0,2]#topleft
-                elif x == ((displayWidth/2) - ((col/2)*len_th)) and y ==  ((displayHeight/2) + ((row/2)*len_th)):
+                elif x == ((0) - ((col/2)*len_th)) and y ==  ((0) + ((row/2)*len_th)):
                     numbers = [0,3]#bottomleft
-                elif x == ((displayWidth/2) + ((col/2)*len_th)) and y == ((displayHeight/2) - ((row/2)*len_th)):#these are the corners
+                elif x == ((0) + ((col/2)*len_th)) and y == ((0) - ((row/2)*len_th)):#these are the corners
                     numbers = [1,4]#topright
-                elif x == ((displayWidth/2) + ((col/2)*len_th)) and y == ((displayHeight/2) + ((row/2)*len_th)):
+                elif x == ((0) + ((col/2)*len_th)) and y == ((0) + ((row/2)*len_th)):
                     numbers = [1,5]#bottomright
                    
-                elif x == ((displayWidth/2) - ((col/2)*len_th)) or x == ((displayWidth/2) - ((col/2)*len_th) + (len_th/2)):#these are the edges
+                elif x == ((0) - ((col/2)*len_th)) or x == ((0) - ((col/2)*len_th) + (len_th/2)):#these are the edges
                     numbers = [0,2,3]#left edge
-                elif y == ((displayHeight/2) - ((row/2)*len_th)):
+                elif y == ((0) - ((row/2)*len_th)):
                     numbers = [0,1,2,4]#top edge
-                elif x == ((displayWidth/2) + ((col/2)*len_th)) or x == ((displayWidth/2) + ((col/2)*len_th) - (len_th/2)):
+                elif x == ((0) + ((col/2)*len_th)) or x == ((0) + ((col/2)*len_th) - (len_th/2)):
                     numbers = [1,4,5]#right edge
-                elif y == ((displayHeight/2) + ((row/2)*len_th)):
+                elif y == ((0) + ((row/2)*len_th)):
                     numbers = [0,1,3,5]#bottom edge
                 else:
                     numbers = [0,1,2,3,4,5]
@@ -277,8 +319,8 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, Pright, Pleft, 
                             weights.append(5)                    
                 
                 number = random.choice(weights)#generates a random number
-                stroke(0)
-                pen.pensize(2)(3)
+                stroke(0,0,0)
+                pen.pensize(3)
                 if number == 0:
                     line(x,y,x+len_th,y)#right
                     x += len_th
@@ -303,34 +345,35 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, Pright, Pleft, 
                     x -= (len_th/2)
                 avg.append([x,y])
             
-            stroke(0)
-            pen.pensize(2)(3)
-            point(x,y)
+            stroke(0,0,0)
+            pen.pensize(2)
+            point(x,y,2)
             xaverage_array.append(x)
             yaverage_array.append(y)
     
-            fill(0)
-            textSize(10)
-            text(num+1,x,y)#writes a number to link the line to the walk_num
+            fill(0,0,0)
+##            textSize(10)
+            pen.write(num+1, font=('arial',12,"normal"))
+##            text(num+1,x,y)#writes a number to link the line to the walk_num
             
-    averageline1(xaverage_array,yaverage_array,xpos)
-    averageline2(step_num,walk_num,avg,xpos)
+    averageline1(xaverage_array,yaverage_array,xpos,ypos)
+    averageline2(step_num,walk_num,avg,xpos,ypos)
     
     
     
 def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Pright, Pleft, Pdown, Pup):
 
     if begin == 1:#start at centre 
-        x = (displayWidth/2)
+        x = (0)
 
     elif begin == 2:#start at left 
-        x = (displayWidth/2) - ((col/2)*len_th)
+        x = (0) - ((col/2)*len_th)
     
     elif begin == 3: #start at right
-        x = (displayWidth/2) + ((col/2)*len_th)
+        x = (0) + ((col/2)*len_th)
         
     xpos = x
-    y = (displayHeight/2)
+    y = (0)
     xaverage_array = []
     yaverage_array = []
     avg = []
@@ -361,21 +404,21 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Pright, 
     # print("Temp X :",temp[0])
     # print("Temp Y :",temp[1])
     # stroke(0,255,0)
-    # line(temp_x,temp_y,displayWidth/2,y)
+    # line(temp_x,temp_y,0,y)
 
     # for num in range(walk_num):
                 
     #     if begin == 1:#start at centre 
-    #         x = (displayWidth/2)
+    #         x = (0)
     
     #     elif begin == 2:#start at left 
-    #         x = (displayWidth/2) - ((col/2)*len_th)
+    #         x = (0) - ((col/2)*len_th)
         
     #     elif begin == 3: #start at right
-    #         x = (displayWidth/2) + ((col/2)*len_th)
+    #         x = (0) + ((col/2)*len_th)
             
     #     xpos = x
-    #     y = (displayHeight/2)
+    #     y = (0)
     #     prevx,prevy = x,y
     #     temp_coord_x = []
     #     temp_coord_y = []
@@ -420,22 +463,22 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Pright, 
                 
         # for j in range(step_num):
             
-            # if x == ((displayWidth/2) - ((col/2)*len_th)) and y == ((displayHeight/2) - ((row/2)*len_th)):#this prevent the line going off the grid
+            # if x == ((0) - ((col/2)*len_th)) and y == ((0) - ((row/2)*len_th)):#this prevent the line going off the grid
             #     numbers = [0,2]
-            # elif x == ((displayWidth/2) - ((col/2)*len_th)) and y ==  ((displayHeight/2) + ((row/2)*len_th)):
+            # elif x == ((0) - ((col/2)*len_th)) and y ==  ((0) + ((row/2)*len_th)):
             #     numbers = [0,3]
-            # elif x == ((displayWidth/2) + ((col/2)*len_th)) and y == ((displayHeight/2) - ((row/2)*len_th)):#these are the corners
+            # elif x == ((0) + ((col/2)*len_th)) and y == ((0) - ((row/2)*len_th)):#these are the corners
             #     numbers = [1,2]
-            # elif x == ((displayWidth/2) + ((col/2)*len_th)) and y == ((displayHeight/2) + ((row/2)*len_th)):
+            # elif x == ((0) + ((col/2)*len_th)) and y == ((0) + ((row/2)*len_th)):
             #     numbers = [1,3]
                 
-            # elif x == ((displayWidth/2) - ((col/2)*len_th)):#these are the edges
+            # elif x == ((0) - ((col/2)*len_th)):#these are the edges
             #     numbers = [0,2,3]
-            # elif y == ((displayHeight/2) - ((row/2)*len_th)):
+            # elif y == ((0) - ((row/2)*len_th)):
             #     numbers = [0,1,2]
-            # elif x == ((displayWidth/2) + ((col/2)*len_th)):
+            # elif x == (len_th)):
             #     numbers = [1,2,3]
-            # elif y == ((displayHeight/2) + ((row/2)*len_th)):
+            # elif y == ((0) + ((row/2)*len_th)):
             #     numbers = [0,1,3]
             # else:
             #     numbers = [0,1,2,3]
@@ -495,9 +538,10 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Pright, 
     
     
     
-def averageline1(xaverage_array,yaverage_array,xpos):
+def averageline1(xaverage_array,yaverage_array,xpos,ypos):
         
     sum_of_x,sum_of_y = 0,0
+    print(xaverage_array)
     
     for l in range(len(xaverage_array)):
         sum_of_x += xaverage_array[l]
@@ -507,17 +551,18 @@ def averageline1(xaverage_array,yaverage_array,xpos):
     yaverage = sum_of_y / len(yaverage_array)
     
     stroke(255,0,0)
-    strokeWeight(3)
-    line(xpos,(displayHeight/2),xaverage,yaverage)
+##    strokeWeight(3)
+    line(xpos,ypos,xaverage,yaverage)
     
     
-def averageline2(step_num,walk_num,average_array,xpos):
+def averageline2(step_num,walk_num,average_array,xpos,ypos):
     x = xpos
-    y = (displayHeight/2)
+    y = ypos
     prevx = x
     prevy = y
     xaverage = []
     yaverage = []
+    print(average_array)
     for i in range(step_num*walk_num):
         xaverage.append(average_array[i][0])
         yaverage.append(average_array[i][1])
@@ -525,7 +570,7 @@ def averageline2(step_num,walk_num,average_array,xpos):
     for j in range(step_num):
         xaverage_t = xaverage[j::step_num]
         yaverage_t = yaverage[j::step_num]
-        print("Xaverage_t:", xaverage_t)
+##        print("Xaverage_t:", xaverage_t)
         
         sum_of_x,sum_of_y = 0,0
 
@@ -541,35 +586,6 @@ def averageline2(step_num,walk_num,average_array,xpos):
         prevx = temp_xaverage
         prevy = temp_yaverage
 
-def draw():
 
-    column = 10
-    row = 10
-    space = 40
-    mode = "square"     #"square","triangle","random"
-    num_of_steps = 1
-    num_of_walks = 1
-    begin = 2
-    name = "Sqaure with Second Average5"
-    Pdown = 0.20
-    Pup  = 0.20
-    Pright = 0.30
-    Pleft = 0.30
-    Prightdown = 0.10
-    Prightup = 0.10
-    Pleftdown = 0.10
-    Pleftup = 0.10
-    
-    coordinates = []
-    # coordinates_dict = NearestDict(2)
-
-    turtle.bgcolor("grey")
-    grid(column,row,space,mode, coordinates)
-
-    if mode.lower() == "square" or mode.lower() == "triangle":
-        drawLines(num_of_walks, num_of_steps, column, row, space, mode, begin, Pright, Pleft, Pdown, Pup, Prightdown, Prightup, Pleftdown, Pleftup)
-##    elif mode.lower() == "random":
-##       drawLinesRandom(num_of_walks, num_of_steps, column, row, space, begin,coordinates, Pright, Pleft, Pdown, Pup)
-##    saveFrame("Walk_{}.png".format(name))
 
 draw()
