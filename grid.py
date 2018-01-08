@@ -1,40 +1,81 @@
-import turtle, time #imports the module
+#Grid
+import turtle
+from Main2 import *
 
-def grid(grid_size_input):
+pen = turtle.Turtle()
+turtle.delay(0)
+pen.ht()
+turtle.colormode(255)
+turtle.tracer(0,0)
 
-    def make_grid(angle1, angle2, angle3, grid_size, partition, length):#defines a function for drwaing the lines of the grid
-        for i in range(grid_size):#repeats for the number of coloums - 1
-            pen.seth(angle1)#sets the turtle to the specified compass direction
-            pen.forward(partition)#moves forward the specified amount
-            pen.seth(angle2)#repeat
-            pen.forward(length)
-            pen.seth(angle3)
-            pen.forward(length)
-    pen = turtle.Turtle()#defines the varaiable
-    time.sleep(20)
-    turtle.delay(0)#sets the delay to 0 to make the animation quick
-    grid_size = (grid_size_input - 1)#the size of the grid is provided as an arguement ot the function. Its -1 because for example for a 5x5 grid 4 lines going down need to be drawn
-    turtle.speed("fastest")#sets the speed to the fastest
-####    height = turtle.window_height()#gets the height of the window to make the grid as big as possible.
-    centre = 300 #defines the overall size of the grid 
-####    centre = int(50*round(float(height / 2)/50))# rounds this value to nearest 50 -- thats all it does
-    pen.up()
-    pen.goto(-centre,centre)#goes to the coordinate of the calculated value
-    pen.down()
-    for i in range(4):#draws a box 
-        pen.forward(centre*2)
-        pen.right(90)
-    length = centre * 2#length of the side of the box
-    partition = length/grid_size#length between every column
-    make_grid(0, 270, 90, grid_size, partition, length)#calls the function
-    pen.up()
-    pen.goto(-centre,centre)#goes to the original point
-    pen.down()
-    make_grid(270, 0, 180, grid_size, partition, length)#calls the function
-    pen.up()
-    pen.goto(0,0)#goes to the centre
-    pen.down()
-    pen.hideturtle()
+   
+def grid(col, row, len_th, mode, coordinates):
 
-if __name__ == "__main__":#if the code is run in this module, without being imported
-    grid(21)#this code will be run.
+    width = turtle.window_width()
+    height = turtle.window_height()
+    x1 = round((0)- ((col/2)*len_th),0)#These two lines centre the grid
+    y1 = round((0) + ((row/2)*len_th),0)
+
+    x,y = x1,y1
+    print("X",x,"Y",y)
+    print("X1",x1+(col*len_th),"Y1",y1+(col*len_th))
+
+    pen.begin_fill()
+    fill(255,255,255)
+    rect(x1,y1,(col*len_th),(row*len_th))#+len_th/2
+    pen.end_fill()
+    
+    if mode.lower() == "random":
+        for i in range(col*row):
+            x = random.randint(x1,x1+(col*len_th))
+            y = random.randint(y1, y1+(row*len_th))
+            pen.pensize(2)
+            point(x,y)
+            pen.pensize(1)
+            coordinates.append([x,y])
+            print("Done")
+            # coordinates_dict[x,y] = i
+        return coordinates
+        # return coordinates_dict
+    else:           
+        for j in range(row):# These two for loops draw the grid
+            for k in range(col+1):
+                stroke(0,0,0)# Sets the colour of the line and controls the transparancy of the line (0 is completely transparant, 255 is completely opaque)
+                if mode.lower() == "square":
+                    rect(x,y,len_th,len_th)
+                elif mode.lower() == "triangle":
+                    triangle(x,y,x+len_th,y,x+(len_th/2),y+len_th)
+                x += len_th
+            y -= len_th
+            if mode.lower() == "square":
+                x = x1
+            elif mode.lower() == "triangle":
+                if j % 2:
+                    x = x1
+                else:
+                    x = x1 - (len_th/2)
+            
+        clear_excess(col, row, len_th)
+        turtle.update()
+
+def clear_excess(col,row,len_th):
+    colour = turtle.bgcolor()
+    pen.pencolor(colour)
+    pen.pensize(1)
+    pen.begin_fill()
+    pen.fillcolor(colour)
+    rect(((0)-((col/2)*len_th))-len_th*2,((0)+((row/2)*len_th)),len_th*2,len_th*row)
+    pen.end_fill()
+    pen.begin_fill()
+    pen.fillcolor(colour)
+    rect(((0)+((col/2)*len_th)),((0)+((row/2)*len_th)),len_th*2,len_th*row)
+    pen.end_fill()
+    stroke(0,0,0)
+##    line(((0)+((col/2)*len_th)),((0)-((row/2)*len_th)),((0)+((col/2)*len_th)),((1)+((row/2)*len_th)))
+    stroke(0,0,0)
+##    line(((0)-((col/2)*len_th)),((0)-((row/2)*len_th)),((0)-((col/2)*len_th)),((1)+((row/2)*len_th)))
+
+if __name__ == "__main__":
+    mode = "sqaure"
+    coord = []
+    grid(10,10,10,mode,coord)
