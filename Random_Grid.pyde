@@ -13,7 +13,7 @@ def draw():
     coloumn = 80
     row = 60
     space = 10
-    mode = "random1"     #"square","triangle","random1","random2"
+    mode = "random"     #"square","triangle","random"
     num_of_steps = 5
     num_of_walks = 10
     begin = 2
@@ -21,9 +21,11 @@ def draw():
     Pleft = 0.00
     Pdown = 0.20
     Pup  = 0.20
+    name = "random2"
 
     grid(coloumn,row,space,mode)
 #    drawLines(num_of_steps, num_of_walks, coloumn, row, space, begin, Pright, Pleft, Pdown, Pup)
+    saveFrame("Walk_{}.png".format(name))
 
 def clear_excess(col,row,len_th):
     stroke(205)
@@ -44,35 +46,32 @@ def grid(col, row, len_th, mode):
     fill(255)
     rect(x1,y1,(col*len_th),(row*len_th))#+len_th/2
     
-    if mode.lower() == "random2":
-        for p in range(col*row):
-            x3 = random.randint(x1,x1+(col*len_th))
-            y3 = random.randint(y1, y1+(row*len_th))
+    if mode.lower() == "random":
+        for i in range(col*row):
+            x = random.randint(x1,x1+(col*len_th))
+            y = random.randint(y1, y1+(row*len_th))
             strokeWeight(2)
-            point(x3,y3)
-    
-    for i in range(row):# These two for loops draw the grid
-        for j in range(col+1):
-            stroke(0,0,0,225)# Sets the colour of the line and controls the transparancy of the line (0 is completely transparant, 255 is completely opaque)
+            point(x,y)
+    else:           
+        for j in range(row):# These two for loops draw the grid
+            for k in range(col+1):
+                stroke(0,0,0,225)# Sets the colour of the line and controls the transparancy of the line (0 is completely transparant, 255 is completely opaque)
+                if mode.lower() == "square":
+                    rect(x,y,len_th,len_th)
+                elif mode.lower() == "triangle":
+                    triangle(x,y,x+len_th,y,x+(len_th/2),y+len_th)
+                x += len_th
+            y += len_th
             if mode.lower() == "square":
-                rect(x,y,len_th,len_th)
-            elif mode.lower() == "triangle":
-                triangle(x,y,x+len_th,y,x+(len_th/2),y+len_th)
-            elif mode.lower() == "random1":
-                strokeWeight(2)
-                point(random.randint(x,x+len_th),random.randint(y,y+len_th))
-            x += len_th
-        y += len_th
-        if mode.lower() == "square" or mode.lower() == "random1":
-            x = x1
-        elif mode.lower() == "triangle":
-            if i % 2:
                 x = x1
-            else:
-                x = x1 - (len_th/2)
-        
-    clear_excess(col, row, len_th)
-    
+            elif mode.lower() == "triangle":
+                if j % 2:
+                    x = x1
+                else:
+                    x = x1 - (len_th/2)
+            
+        clear_excess(col, row, len_th)
+
     
 def drawLines(walk_num, step_num, col, row, len_th, begin, Pright, Pleft, Pdown, Pup):
     
@@ -120,16 +119,16 @@ def drawLines(walk_num, step_num, col, row, len_th, begin, Pright, Pleft, Pdown,
             
             for i in range(len(numbers)):
                 if numbers[i] == 0:
-                    for j in range(int(Pright*100)):
+                    for k in range(int(Pright*100)):
                         weights.append(0)
                 if numbers[i] == 1:
-                    for j in range(int(Pleft*100)):
+                    for k in range(int(Pleft*100)):
                         weights.append(1)
                 if numbers[i] == 2:
-                    for j in range(int(Pdown*100)):
+                    for k in range(int(Pdown*100)):
                         weights.append(2)
                 if numbers[i] == 3:
-                    for j in range(int(Pup*100)):
+                    for k in range(int(Pup*100)):
                         weights.append(3)
                 
             number = random.choice(weights)#generates a random number
