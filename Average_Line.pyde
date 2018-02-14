@@ -9,19 +9,19 @@ def setup():
     noLoop()
     
 def draw():
-   
+
     coloumn = 80
     row = 60
     space = 10
-    mode = "triangle"     #"square","triangle","random"
-    num_of_steps = 120
-    num_of_walks = 500
+    mode = "square"     #"square","triangle","random"
+    num_of_steps = 60
+    num_of_walks = 50
     begin = 2
-    name = "triangle"
-    Pdown = 0.00
-    Pup  = 0.00
-    Pright = 0.50
-    Pleft = 0.10
+    name = "Sqaure with Second Average5"
+    Pdown = 0.20
+    Pup  = 0.20
+    Pright = 0.60
+    Pleft = 0.00
     Prightdown = 0.10
     Prightup = 0.10
     Pleftdown = 0.10
@@ -29,7 +29,7 @@ def draw():
 
     grid(coloumn,row,space,mode)
     drawLines(num_of_walks, num_of_steps, coloumn, row, space, mode, begin, Pright, Pleft, Pdown, Pup, Prightdown, Prightup, Pleftdown, Pleftup)
-#    saveFrame("Walk_{}.png".format(name))
+    saveFrame("Walk_{}.png".format(name))
 
 def clear_excess(col,row,len_th):
     stroke(205)
@@ -81,6 +81,7 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, Pright, Pleft, 
     
     xaverage_array = []
     yaverage_array = []
+    avg = []
     
     if mode.lower() == "square":
         
@@ -152,6 +153,10 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, Pright, Pleft, 
                 elif number == 3:
                     line(x,y,x,y-len_th)#up
                     y -= len_th
+
+                avg.append([x,y])
+
+            print("Average = ",avg)
             
             stroke(0)
             strokeWeight(3)
@@ -249,6 +254,7 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, Pright, Pleft, 
                     line(x,y,x-(len_th/2),y-len_th)#up left
                     y -= len_th
                     x -= (len_th/2)
+                avg.append([x,y])
             
             stroke(0)
             strokeWeight(3)
@@ -259,9 +265,14 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, Pright, Pleft, 
             fill(0)
             textSize(10)
             text(num+1,x,y)#writes a number to link the line to the walk_num
+            
+    averageline1(xaverage_array,yaverage_array,xpos)
+    averageline2(step_num,walk_num,avg,xpos)
     
     
     
+def averageline1(xaverage_array,yaverage_array,xpos):
+        
     sum_of_x,sum_of_y = 0,0
     
     for l in range(len(xaverage_array)):
@@ -274,3 +285,59 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, Pright, Pleft, 
     stroke(255,0,0)
     strokeWeight(3)
     line(xpos,(displayHeight/2),xaverage,yaverage)
+    
+    
+def averageline2(step_num,walk_num,average_array,xpos):
+    x = xpos
+    y = (displayHeight/2)
+    prevx = x
+    prevy = y
+    xaverage = []
+    yaverage = []
+    for i in range(step_num*walk_num):
+        xaverage.append(average_array[i][0])
+        yaverage.append(average_array[i][1])
+        
+    for j in range(step_num):
+        xaverage_t = xaverage[j::step_num]
+        yaverage_t = yaverage[j::step_num]
+        print("Xaverage_t:", xaverage_t)
+        
+        sum_of_x,sum_of_y = 0,0
+
+        for k in range(len(xaverage_t)):
+            sum_of_x += xaverage_t[k]
+            sum_of_y += yaverage_t[k]
+        
+        temp_xaverage = sum_of_x / len(xaverage_t)
+        temp_yaverage = sum_of_y / len(yaverage_t)
+        
+        stroke(0,0,255)
+        line(prevx,prevy,temp_xaverage,temp_yaverage)
+        prevx = temp_xaverage
+        prevy = temp_yaverage
+        # print("temp x ",temp_xaverage)
+        # print("Temp y ",temp_yaverage)
+        
+        
+        
+        
+    # xaverage1 = xaverage[::5]
+    # yaverage1 = yaverage[::5]
+    # sum_of_x,sum_of_y = 0,0
+
+    # for l in range(len(xaverage1)):
+    #     sum_of_x += xaverage1[l]
+    #     sum_of_y += yaverage1[l]
+        
+    # temp_xaverage = sum_of_x / len(xaverage1)
+    # temp_yaverage = sum_of_y / len(yaverage1)
+    # stroke(0,0,255)
+    # line(prevx,prevy,temp_xaverage,temp_yaverage)
+    # xaverage2 = xaverage[1::5]
+    print("Xaverage =",xaverage)
+    print("Yaverage =",yaverage)
+    print("Xaverage1 =",xaverage_t)
+    # print("Xaverage2 =",xaverage2)
+
+        
