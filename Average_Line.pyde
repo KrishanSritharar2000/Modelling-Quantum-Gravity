@@ -13,15 +13,15 @@ def draw():
     coloumn = 80
     row = 60
     space = 10
-    mode = "square"     #"square","triangle","random"
-    num_of_steps = 60
-    num_of_walks = 50
+    mode = "triangle"     #"square","triangle","random"
+    num_of_steps = 125
+    num_of_walks = 100
     begin = 2
     name = "Sqaure with Second Average5"
     Pdown = 0.20
     Pup  = 0.20
-    Pright = 0.60
-    Pleft = 0.00
+    Pright = 0.50
+    Pleft = 0.10
     Prightdown = 0.10
     Prightup = 0.10
     Pleftdown = 0.10
@@ -31,15 +31,6 @@ def draw():
     drawLines(num_of_walks, num_of_steps, coloumn, row, space, mode, begin, Pright, Pleft, Pdown, Pup, Prightdown, Prightup, Pleftdown, Pleftup)
     saveFrame("Walk_{}.png".format(name))
 
-def clear_excess(col,row,len_th):
-    stroke(205)
-    strokeWeight(1)
-    fill(205)
-    rect(((displayWidth/2)+((col/2)*len_th)),((displayHeight/2)-((row/2)*len_th)),len_th*2,len_th*row)
-    rect(((displayWidth/2)-((col/2)*len_th))-len_th*2,((displayHeight/2)-((row/2)*len_th)),len_th*2,len_th*row)
-    stroke(0)
-    line(((displayWidth/2)+((col/2)*len_th)),((displayHeight/2)-((row/2)*len_th)),((displayWidth/2)+((col/2)*len_th)),((displayHeight/2)+((row/2)*len_th)))
-    line(((displayWidth/2)-((col/2)*len_th)),((displayHeight/2)-((row/2)*len_th)),((displayWidth/2)-((col/2)*len_th)),((displayHeight/2)+((row/2)*len_th)))
 
 def grid(col, row, len_th, mode):
     
@@ -76,6 +67,15 @@ def grid(col, row, len_th, mode):
             
         clear_excess(col, row, len_th)
 
+def clear_excess(col,row,len_th):
+    stroke(205)
+    strokeWeight(1)
+    fill(205)
+    rect(((displayWidth/2)+((col/2)*len_th)),((displayHeight/2)-((row/2)*len_th)),len_th*2,len_th*row)
+    rect(((displayWidth/2)-((col/2)*len_th))-len_th*2,((displayHeight/2)-((row/2)*len_th)),len_th*2,len_th*row)
+    stroke(0)
+    line(((displayWidth/2)+((col/2)*len_th)),((displayHeight/2)-((row/2)*len_th)),((displayWidth/2)+((col/2)*len_th)),((displayHeight/2)+((row/2)*len_th)))
+    line(((displayWidth/2)-((col/2)*len_th)),((displayHeight/2)-((row/2)*len_th)),((displayWidth/2)-((col/2)*len_th)),((displayHeight/2)+((row/2)*len_th)))
     
 def drawLines(walk_num, step_num, col, row, len_th, mode, begin, Pright, Pleft, Pdown, Pup, Prightdown, Prightup, Pleftdown, Pleftup):
     
@@ -200,9 +200,9 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, Pright, Pleft, 
                     numbers = [0,2,3]#left edge
                 elif y == ((displayHeight/2) - ((row/2)*len_th)):
                     numbers = [0,1,2,4]#top edge
-                elif x == ((displayWidth/2) + ((col/2)*len_th)):
-                    numbers = [1,4,5]#left edge
-                elif y == ((displayHeight/2) + ((row/2)*len_th)) or x == ((displayWidth/2) + ((col/2)*len_th) - (len_th/2)):
+                elif x == ((displayWidth/2) + ((col/2)*len_th)) or x == ((displayWidth/2) + ((col/2)*len_th) - (len_th/2)):
+                    numbers = [1,4,5]#right edge
+                elif y == ((displayHeight/2) + ((row/2)*len_th)):
                     numbers = [0,1,3,5]#bottom edge
                 else:
                     numbers = [0,1,2,3,4,5]
@@ -316,28 +316,5 @@ def averageline2(step_num,walk_num,average_array,xpos):
         line(prevx,prevy,temp_xaverage,temp_yaverage)
         prevx = temp_xaverage
         prevy = temp_yaverage
-        # print("temp x ",temp_xaverage)
-        # print("Temp y ",temp_yaverage)
-        
-        
-        
-        
-    # xaverage1 = xaverage[::5]
-    # yaverage1 = yaverage[::5]
-    # sum_of_x,sum_of_y = 0,0
-
-    # for l in range(len(xaverage1)):
-    #     sum_of_x += xaverage1[l]
-    #     sum_of_y += yaverage1[l]
-        
-    # temp_xaverage = sum_of_x / len(xaverage1)
-    # temp_yaverage = sum_of_y / len(yaverage1)
-    # stroke(0,0,255)
-    # line(prevx,prevy,temp_xaverage,temp_yaverage)
-    # xaverage2 = xaverage[1::5]
-    print("Xaverage =",xaverage)
-    print("Yaverage =",yaverage)
-    print("Xaverage1 =",xaverage_t)
-    # print("Xaverage2 =",xaverage2)
 
         
