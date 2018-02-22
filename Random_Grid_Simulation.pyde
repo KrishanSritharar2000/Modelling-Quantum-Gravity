@@ -2,8 +2,6 @@
 
 #Random Walks 
 import random
-import scipy
-import numpy
 
 def setup():
     fullScreen()
@@ -11,8 +9,8 @@ def setup():
     
 def draw():
 
-    column = 4
-    row = 4
+    column = 2
+    row = 2
     space = 80
     mode = "random"     #"square","triangle","random"
     num_of_steps = 1
@@ -298,17 +296,32 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Pright, 
     xaverage_array = []
     yaverage_array = []
     avg = []
-    print(coord)
+    print("Coord: ", coord)
+    
     def getKeyX(item):
         return item[0]
     def getKeyY(item):
         return item[1]
+    def find_nearest(x1,y1,x_array,y_array):
+        x_distance = []
+        y_distance = []
+        for i in range(len(x_array)):
+            x_distance.append(abs(x_array[i][0]-x1))
+            y_distance.append(abs(y_array[i][1]-y1))
+
+        min_x = min(x_distance)
+        min_y = min(y_distance)
+            
+        print(min_x,min_y)
+        
     coord_x = sorted(coord, key=getKeyX)
     coord_y = sorted(coord, key=getKeyY)
     print()
     print("Coord_x: ",coord_x)
     print()
-    print("Coord_y: ",coord_y)    
+    print("Coord_y: ",coord_y)  
+    print(xpos,y)  
+    find_nearest(xpos,y,coord_x,coord_y)
     # print("Coordinate 1: ", coord)  
     # print("")    
     # print("Coordinates 2: ", coord2)
@@ -323,70 +336,60 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Pright, 
     # stroke(0,255,0)
     # line(temp_x,temp_y,displayWidth/2,y)
 
-    for num in range(walk_num):
+    # for num in range(walk_num):
                 
-        if begin == 1:#start at centre 
-            x = (displayWidth/2)
+        # if begin == 1:#start at centre 
+    #         x = (displayWidth/2)
     
-        elif begin == 2:#start at left 
-            x = (displayWidth/2) - ((col/2)*len_th)
+    #     elif begin == 2:#start at left 
+    #         x = (displayWidth/2) - ((col/2)*len_th)
         
-        elif begin == 3: #start at right
-            x = (displayWidth/2) + ((col/2)*len_th)
+    #     elif begin == 3: #start at right
+    #         x = (displayWidth/2) + ((col/2)*len_th)
             
-        xpos = x
-        y = (displayHeight/2)
-        prevx,prevy = x,y
-        temp_coord_x = []
-        temp_coord_y = []
+    #     xpos = x
+    #     y = (displayHeight/2)
+    #     prevx,prevy = x,y
+    #     temp_coord_x = []
+    #     temp_coord_y = []
+                
+        # space = abs(len_th/(row*col))
+        # # space = 30
+        # for j in range(step_num):
+        #     while len(temp_coord_x) == 0:
+        #         for i in range(len(coord_x)):
+        #             temp_x = (coord_x[i][0])
+        #             # print("Temp - space: ",(temp_x - space ))
+        #             # print("Temp + space: ",(temp_x + space ))
+        #             if (prevx - space ) <= temp_x <= (prevx + space):
+        #                 temp_coord_x.append(coord_x[i])
+        #         space += 2
+        #     print("TempX",temp_coord_x)
+        #     print("ABS",abs(len_th/(row*col)))
+        #     print("new space", space)
+        #     space = abs(len_th/(row*col))
+        #     # space = 30
+        #     while len(temp_coord_y) == 0:
+        #         for i in range(len(coord_y)):
+        #             temp_y = (coord_y[i][0])
+        #             # print("Temp - space: ",(temp_y - space ))
+        #             # print("Temp + space: ",(temp_y + space ))
+        #             if (prevy - space ) <= temp_y <= (prevy + space):
+        #                 temp_coord_y.append(coord_y[i])
+        #         space += 2
+        #     print("TempXY",temp_coord_y)
+        #     print("ABS",abs(len_th/(row*col)))
+        #     print("new space", space)
+        #     for i in range(len(temp_coord_x)):
+        #         stroke(255,0,0)
+        #         strokeWeight(5)
+        #         point(temp_coord_x[i][0], temp_coord_x[i][1])
+        #         print("Donex")
+        #     for i in range(len(temp_coord_y)):
+        #         stroke(0,255,0)
+        #         strokeWeight(5)
+        #         point(temp_coord_y[i][0], temp_coord_y[i][1])
 
-        space = abs(len_th/(row*col))
-        # space = 30
-        for j in range(step_num):
-            while len(temp_coord_x) == 0:
-                for i in range(len(coord_x)):
-                    temp_x = (coord_x[i][0])
-                    # print("Temp - space: ",(temp_x - space ))
-                    # print("Temp + space: ",(temp_x + space ))
-                    if (prevx - space ) <= temp_x <= (prevx + space):
-                        temp_coord_x.append(coord_x[i])
-                space += 2
-            print("TempX",temp_coord_x)
-            print("ABS",abs(len_th/(row*col)))
-            print("new space", space)
-            space = abs(len_th/(row*col))
-            # space = 30
-            while len(temp_coord_y) == 0:
-                for i in range(len(coord_y)):
-                    temp_y = (coord_y[i][0])
-                    # print("Temp - space: ",(temp_y - space ))
-                    # print("Temp + space: ",(temp_y + space ))
-                    if (prevy - space ) <= temp_y <= (prevy + space):
-                        temp_coord_y.append(coord_y[i])
-                space += 2
-            print("TempXY",temp_coord_y)
-            print("ABS",abs(len_th/(row*col)))
-            print("new space", space)
-            for i in range(len(temp_coord_x)):
-                stroke(255,0,0)
-                strokeWeight(5)
-                point(temp_coord_x[i][0], temp_coord_x[i][1])
-                print("Donex")
-            for i in range(len(temp_coord_y)):
-                stroke(0,255,0)
-                strokeWeight(5)
-                point(temp_coord_y[i][0], temp_coord_y[i][1])
-                print("Done y")
-        # temp_coord = coord2.nearest_key((xpos,y))
-        # temp_coord_x = temp_coord[0]
-        # temp_coord_y = temp_coord[1]
-        # stroke(0)
-        # strokeWeight(1)
-        # line(prevx,prevy,temp_coord_x,temp_coord_y)
-        # prevx = temp_coord_x
-        # prevy = temp_coord_y
-        # del coord2[temp_coord]
-        # avg.append([prevx,prevy])
                 
         # for j in range(step_num):
             
@@ -510,31 +513,3 @@ def averageline2(step_num,walk_num,average_array,xpos):
         line(prevx,prevy,temp_xaverage,temp_yaverage)
         prevx = temp_xaverage
         prevy = temp_yaverage
-
-# class NearestDict(dict):
-    
-#     def __init__(self, ndims):
-#         super(NearestDict, self).__init__()
-#         self.ndims = ndims
-
-#     # Enforce dimensionality
-#     def __setitem__(self, key, val):
-#         if not isinstance(key, tuple): key = (key,)
-#         if len(key) != self.ndims: raise KeyError("key must be %d dimensions" % self.ndims)
-#         super(NearestDict, self).__setitem__(key, val)
-
-#     @staticmethod
-#     def __dist(ka, kb):
-#         assert len(ka) == len(kb)
-#         return sum((ea-eb)**2 for (ea, eb) in zip(ka, kb))
-
-#     # Helper method and might be of use
-#     def nearest_key(self, key):
-#         if not isinstance(key, tuple): key = (key,)
-#         nk = min((k for k in self), key=lambda k: NearestDict.__dist(key, k))
-#         return nk
-
-#     def __missing__(self, key):
-#         if not isinstance(key, tuple): key = (key,)
-#         if len(key) != self.ndims: raise KeyError("key must be %d dimensions" % self.ndims)
-#         return self[self.nearest_key(key)]    
