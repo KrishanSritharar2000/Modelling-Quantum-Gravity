@@ -8,19 +8,19 @@ def setup():
     noLoop()
     
 def draw():
-    
-    column = 9
-    row = 9
-    space = 80
-    mode = "random"     #"square","triangle","random"
-    num_of_steps = 10
-    num_of_walks = 2
+
+    column = 8
+    row = 8
+    space = 40
+    mode = "triangle"     #"square","triangle","random"
+    num_of_steps = 5
+    num_of_walks = 5
     begin = 2
-    name = "Sqaure with Second Average5"
+    name = "Triangle Grid 5x5"
     Pdown = 0.20
     Pup  = 0.20
-    Pright = 0.30
-    Pleft = 0.30
+    Pright = 0.60
+    Pleft = 0.00
     Prightdown = 0.10
     Prightup = 0.10
     Pleftdown = 0.10
@@ -382,11 +382,11 @@ def find_points(x,y,index,coord,col,row):
         leftdown_array = [()]
     if len(rightdown_array) == 0:
         rightdown_array = [()]
-    all_arrays = (leftup_array + rightup_array + leftdown_array + rightdown_array)
+    # all_arrays = (leftup_array + rightup_array + leftdown_array + rightdown_array)
     print("all Arrays", all_arrays)
 
-    return all_arrays
-    global numbers,leftup_array,rightup_array,leftdown_array,rightdown_array    
+    # return all_arrays
+    # global numbers,leftup_array,rightup_array,leftdown_array,rightdown_array    
 
     
     
@@ -409,20 +409,110 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Prightdo
     x,y,index = nearest_coord[0],nearest_coord[1],nearest_coord[2]
     # print(x,y,index)   
     coord = remove_from_coord(index,coord,col,row)
+
+    xaverage_array = []
+    yaverage_array = []    
+    avg = []
         
-    for i in range(walk_num):
-        
+    for num in range(walk_num):
+
+        # result = find_points(x,y,index,coord,col,row)
+        x,y = nearest_coord[0],nearest_coord[1]
+        print("x",x)
+        print("y",y)
+        print("Original coord",coord)
+    
+        print("Updated coord",coord)
+        leftup,rightup,leftdown,rightdown = False,False,False,False
+        leftup_count,rightup_count,leftdown_count,rightdown_count = 0,0,0,0
+        leftup_array,rightup_array,leftdown_array,rightdown_array = [],[],[],[]
+        max_count = int(round(sqrt(row*col)/2,0))
+        dist_x,dist_y,diagonal_dist,numbers = [],[],[],[]
+        # points_removed = 1
+        for i in range(col*row-1):
+            dist_x.append(abs(coord[i][0] - x))
+            dist_y.append(abs(coord[i][1] - y))
+            diagonal_dist.append(round(sqrt(dist_x[i]**2 + dist_y[i]**2),2))
+        max_value = max(diagonal_dist)
+        print("A",diagonal_dist)
+        print("Maxcount",max_count)
+        loops = 0        
+        multiple_numbers = []
+                                
         for j in range(step_num):
             
             prevx,prevy = x,y
-            result = find_points(x,y,index,coord,col,row)
+            
+            
+            while (leftup == False or rightup == False or leftdown == False or rightdown == False) and loops < (col*row*2):
+                temp_min = min(diagonal_dist)
+                print("tempmin",temp_min)
+                temp_min_index = diagonal_dist.index(temp_min)
+                print("tempminindex", temp_min_index)
+                if leftup_count < max_count:
+                    if coord[temp_min_index][0] < x and coord[temp_min_index][1] < y:#to the left and up
+                        leftup = True
+                        leftup_count +=1
+                        print("leftup_count",leftup_count)
+                        leftup_array.append((coord[temp_min_index][0],coord[temp_min_index][1]))
+                        numbers.append(0)
+                        diagonal_dist.pop(temp_min_index)
+                        diagonal_dist.insert(temp_min_index,(max_value*1000))
+                if rightup_count < max_count:
+                    if coord[temp_min_index][0] > x and coord[temp_min_index][1] < y:#to the left and up
+                        rightup = True
+                        rightup_count +=1
+                        print("rightup_count",rightup_count)
+                        rightup_array.append((coord[temp_min_index][0],coord[temp_min_index][1]))                
+                        numbers.append(1)
+                        diagonal_dist.pop(temp_min_index)   
+                        diagonal_dist.insert(temp_min_index,(max_value*1000))
+                if leftdown_count < max_count:
+                    if coord[temp_min_index][0] < x and coord[temp_min_index][1] > y:#to the left and up
+                        leftdown = True
+                        leftdown_count +=1
+                        print("leftdown_count",leftdown_count)
+                        leftdown_array.append((coord[temp_min_index][0],coord[temp_min_index][1]))                
+                        numbers.append(2)
+                        diagonal_dist.pop(temp_min_index)
+                        diagonal_dist.insert(temp_min_index,(max_value*1000))
+                if rightdown_count < max_count:
+                    if coord[temp_min_index][0] > x and coord[temp_min_index][1] > y:#to the left and up
+                        rightdown = True
+                        rightdown_count +=1
+                        print("rightdown_count",rightdown_count)
+                        rightdown_array.append((coord[temp_min_index][0],coord[temp_min_index][1]))                
+                        numbers.append(3)
+                        diagonal_dist.pop(temp_min_index)
+                        diagonal_dist.insert(temp_min_index,(max_value*1000))
+                loops += 1
+                print()
+                print("New",diagonal_dist)
+                print("Numbers",numbers, "loop",loops)
+                print("leftup_array ",leftup_array)
+                print("rightup_array ",rightup_array)
+                print("leftdown_array ",leftdown_array)
+                print("rightdown_array ",rightdown_array)
+            if len(leftup_array) == 0:
+                leftup_array = [()]
+            if len(rightup_array) == 0:
+                rightup_array = [()]
+            if len(leftdown_array) == 0:
+                leftdown_array = [()]
+            if len(rightdown_array) == 0:
+                rightdown_array = [()]
+            # all_arrays = (leftup_array + rightup_array + leftdown_array + rightdown_array)
+            # print("all Arrays", all_arrays)
+        
+            # return all_arrays
+            # global numbers,leftup_array,rightup_array,leftdown_array,rightdown_array    
+            
             # leftup_array,rightup_array,leftdown_array,rightdown_array =  result[0],result[1],result[2],result[3]
             print("leftup",leftup_array)
             print("rightup",rightup_array)
             print("leftdown",leftdown_array)
             print("rightdown",rightdown_array)
-
-            multiple_numbers = []
+            
             for i in range(4):
                 temp_count = numbers.count(i)
                 print(i,"tempcount: ",temp_count)
@@ -453,45 +543,72 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Prightdo
             number = random.choice(weights)#generates a random number
             stroke(0,0,0,105)
             strokeWeight(3)
-            if number == 0:#leftup
+            print("leftup",leftup_array)
+            print("rightup",rightup_array)
+            print("leftdown",leftdown_array)
+            print("rightdown",rightdown_array)
+            print("prevx",prevx)
+            print("prevy", prevy)
+            stroke(0,0,0,100)
+            if len(numbers) == 0:
+                temp_amount_random_number = int(random.randint(0, col*row-1))
+                line(prevx,prevy,coord[temp_amount_random_number][0],coord[temp_amount_random_number][1])
+            elif number == 0:#leftup
                 if multiple_numbers.count(0) == 0:
-                    line(prevx,prevy,leftup_array[0],leftup_array[1])
-                    x,y = leftup_array[0],leftup_array[1]
+                    # print("AAAAAA",prevx,prevy,leftup_array[0],leftup_array[1])
+                    stroke(0,0,0,100)
+                    line(prevx,prevy,leftup_array[0][0],leftup_array[0][1])
+                    x,y = leftup_array[0][0],leftup_array[0][1]
                 elif multiple_numbers.count(0) >= 1:
                     temp_amount = multiple_numbers.count(0)
                     temp_amount_random_number = int(random.randint(0, temp_amount))
+                    stroke(0,0,0,100)
                     line(prevx,prevy,leftup_array[temp_amount_random_number][0],leftup_array[temp_amount_random_number][1])
                     x,y = leftup_array[temp_amount_random_number][0],leftup_array[temp_amount_random_number][1]            
             elif number == 1:#rightup
                 if multiple_numbers.count(1) == 0:
-                    line(prevx,prevy,rightup_array[0],rightup_array[1])
-                    x,y = rightup_array[0],rightup_array[1]
+                    # print("BBBBBB",prevx,prevy,rightup_array[0],rightup_array[1])
+                    stroke(0,0,0,100)
+                    line(prevx,prevy,rightup_array[0][0],rightup_array[0][1])
+                    x,y = rightup_array[0][0],rightup_array[0][1]
                 elif multiple_numbers.count(1) >= 1:
                     temp_amount = multiple_numbers.count(1)
                     temp_amount_random_number = int(random.randint(0, temp_amount))
+                    stroke(0,0,0,100)
                     line(prevx,prevy,rightup_array[temp_amount_random_number][0],rightup_array[temp_amount_random_number][1])
                     x,y = rightup_array[temp_amount_random_number][0],rightup_array[temp_amount_random_number][1] 
             elif number == 2:#leftdown
                 if multiple_numbers.count(2) == 0:
-                    line(prevx,prevy,leftdown_array[0],leftdown_array[1])
-                    x,y = leftdown_array[0],leftdown_array[1]
+                    # print("CCCCCC",prevx,prevy,leftdown_array[0],leftdown_array[1])
+                    stroke(0,0,0,100)
+                    line(prevx,prevy,leftdown_array[0][0],leftdown_array[0][1])
+                    x,y = leftdown_array[0][0],leftdown_array[0][1]
                 elif multiple_numbers.count(2) >= 1:
                     temp_amount = multiple_numbers.count(2)
                     temp_amount_random_number = int(random.randint(0, temp_amount))
+                    stroke(0,0,0,100)
                     line(prevx,prevy,leftdown_array[temp_amount_random_number][0],leftdown_array[temp_amount_random_number][1])
                     x,y = leftdown_array[temp_amount_random_number][0],leftdown_array[temp_amount_random_number][1] 
             elif number == 3:#rightdown
                 if multiple_numbers.count(3) == 0:
-                    line(prevx,prevy,rightdown_array[0],rightdown_array[1])
-                    x,y = rightdown_array[0],rightdown_array[1]
+                    # print("DDDDDDDD", prevx,prevy,rightdown_array[0],rightdown_array[1])
+                    stroke(0,0,0,100)
+                    line(prevx,prevy,rightdown_array[0][0],rightdown_array[0][1])
+                    x,y = rightdown_array[0][0],rightdown_array[0][1]
                 elif multiple_numbers.count(3) >= 1:
                     temp_amount = multiple_numbers.count(3)
                     temp_amount_random_number = int(random.randint(0, temp_amount))
+                    stroke(0,0,0,100)
                     line(prevx,prevy,rightdown_array[temp_amount_random_number][0],rightdown_array[temp_amount_random_number][1])
                     x,y = rightdown_array[temp_amount_random_number][0],rightdown_array[temp_amount_random_number][1] 
-        
-            # avg.append([x,y])        
-    
+                     
+        avg.append([x,y])        
+    xaverage_array.append(x)
+    yaverage_array.append(y)
+
+    fill(0)
+    textSize(10)
+    text(num+1,x,y)#writes a number to link the line to the walk_num
     # averageline1(xaverage_array,yaverage_array,xpos)
     # averageline2(step_num,walk_num,avg,xpos)
 
