@@ -9,18 +9,20 @@ def setup():
     
 def draw():
 
-    column = 32
-    row = 24
-    space = 30
+    column = 80
+    row = 72
+    space = 10
     mode = "square"     #"square","triangle","random"
-    num_of_steps = 60
-    num_of_walks = 50
+    num_of_steps = 250
+    num_of_walks = 100
     begin = 2
-    name = "Triangle Grid 5x5"
-    Pdown = 0.20
-    Pup  = 0.20
-    Pright = 0.60
-    Pleft = 0.00
+    planet = True
+    planet_position = 2
+    name = "Square Grid Planet 2"
+    Pdown = 0.25
+    Pup  = 0.25
+    Pright = 0.40
+    Pleft = 0.10
     Prightdown = 0.10
     Prightup = 0.10
     Pleftdown = 0.10
@@ -30,12 +32,13 @@ def draw():
     # coordinates_dict = NearestDict(2)
      
     grid(column,row,space,mode, coordinates) 
-    drawPlanets(column,row,space) 
-    if mode.lower() == "square" or mode.lower() == "triangle":
-        drawLines(num_of_walks, num_of_steps, column, row, space, mode, begin, Pright, Pleft, Pdown, Pup, Prightdown, Prightup, Pleftdown, Pleftup)
+    if planet == True:
+        drawPlanets(column,row,space,planet_position) 
+    # if mode.lower() == "square" or mode.lower() == "triangle":
+    #     drawLines(num_of_walks, num_of_steps, column, row, space, mode, begin, planet, planet_position, Pright, Pleft, Pdown, Pup, Prightdown, Prightup, Pleftdown, Pleftup)
     # elif mode.lower() == "random":
     #    drawLinesRandom(num_of_walks, num_of_steps, column, row, space, begin,coordinates, Pright, Pleft, Pdown, Pup)
-    # saveFrame("Walk_{}.png".format(name))
+    saveFrame("Walk_{}.png".format(name))
 
 
 def grid(col, row, len_th, mode, coordinates):
@@ -92,80 +95,96 @@ def clear_excess(col,row,len_th):
     
     
     
-def drawPlanets(col,row,len_th):
-    
-    for i in range(2):
-        if i == 0:
-            size_x = 0.125
-            size_y = 0.125
-            space_multi = 0.5
-        elif i == 1:
-            size_x = 0.0625
-            size_y = 0.1875
-            space_multi = 0.25
-        cornerPlanet_x = (displayWidth*0.5) - (col*size_x*len_th)    
-        cornerPlanet_y = (displayHeight*0.5) + (row*size_y*len_th)  
-        centrePlanet_x = (displayWidth*0.5)
-        centrePlanet_y = (displayHeight*0.5) + (int(row*0.25)*len_th)
-        space = len_th*space_multi    
-        fill(255)
-        strokeWeight(1)
-        rect(cornerPlanet_x,cornerPlanet_y,(col*(space_multi/2))*len_th,(row*(space_multi/2))*len_th)
-        x,y = cornerPlanet_x,cornerPlanet_y
-        for i in range(int(0.5*row)):#30
-            for j in range(int(0.5*col)):#40
-                stroke(0,0,0,255)
-                rect(x,y,space,space)
-                x += space
-            y += space
-            x = cornerPlanet_x
-            
-    cornerPlanet_x = (displayWidth*0.5) - (col*(0.0625/2)*len_th)   
-    cornerPlanet_y = (displayHeight*0.5) + (row*(0.1875+(0.0625/2))*len_th)  
+def drawPlanets(col,row,len_th,position):
+    if position == 1:
+        for i in range(2):
+            if i == 0:
+                size_x = 0.125
+                size_y = 0.125
+                space_multi = 0.5
+            elif i == 1:
+                size_x = 0.0625
+                size_y = 0.1875
+                space_multi = 0.25
+            cornerPlanet_x = (displayWidth*0.5) - (col*size_x*len_th)    
+            cornerPlanet_y = (displayHeight*0.5) + (row*size_y*len_th)  
+            centrePlanet_x = (displayWidth*0.5)
+            centrePlanet_y = (displayHeight*0.5) + (int(row*0.25)*len_th)
+            space = len_th*space_multi    
+            fill(255)
+            strokeWeight(1)
+            rect(cornerPlanet_x,cornerPlanet_y,(col*(space_multi/2))*len_th,(row*(space_multi/2))*len_th)
+            x,y = cornerPlanet_x,cornerPlanet_y
+            for i in range(int(0.5*row)):#30
+                for j in range(int(0.5*col)):#40
+                    stroke(0,0,0,255)
+                    rect(x,y,space,space)
+                    x += space
+                y += space
+                x = cornerPlanet_x
+        cornerPlanet_x = (displayWidth*0.5) - (col*(0.0625/2)*len_th)   
+        cornerPlanet_y = (displayHeight*0.5) + (row*(0.1875+(0.0625/2))*len_th)  
+        rect(cornerPlanet_x,cornerPlanet_y,(col*(0.125/2))*len_th,(row*0.0625)*len_th)
+    elif position == 2:
+        for i in range(2):
+            if i == 0:
+                size_x = 0.125
+                size_y = 0.125
+                space_multi = 0.5
+            elif i == 1:
+                size_x = 0.0625
+                size_y = 0.0625
+                space_multi = 0.25
+            cornerPlanet_x = (displayWidth*0.5) - (col*size_x*len_th)    
+            cornerPlanet_y = (displayHeight*0.5) - (row*size_y*len_th)  
+            centrePlanet_x = (displayWidth*0.5)
+            centrePlanet_y = (displayHeight*0.5)
+            space = len_th*space_multi    
+            fill(255)
+            strokeWeight(1)
+            rect(cornerPlanet_x,cornerPlanet_y,(col*(space_multi/2))*len_th,(row*(space_multi/2))*len_th)
+            x,y = cornerPlanet_x,cornerPlanet_y
+            for i in range(int(0.5*row)):#30
+                for j in range(int(0.5*col)):#40
+                    stroke(0,0,0,255)
+                    rect(x,y,space,space)
+                    x += space
+                y += space
+                x = cornerPlanet_x
+        cornerPlanet_x = (displayWidth*0.5) - (col*(0.0625/2)*len_th)   
+        cornerPlanet_y = (displayHeight*0.5) - (row*(0.0625/2)*len_th)  
+        rect(cornerPlanet_x,cornerPlanet_y,(col*0.0625)*len_th,(row*0.0625)*len_th)
+    if position == 3:
+        for i in range(2):
+            if i == 0:
+                size_x = 0.125
+                size_y = 0.375
+                space_multi = 0.5
+            elif i == 1:
+                size_x = 0.0625
+                size_y = 0.3125
+                space_multi = 0.25
+            cornerPlanet_x = (displayWidth*0.5) - (col*size_x*len_th)    
+            cornerPlanet_y = (displayHeight*0.5) - (row*size_y*len_th)  
+            centrePlanet_x = (displayWidth*0.5)
+            centrePlanet_y = (displayHeight*0.5) - (int(row*0.25)*len_th)
+            space = len_th*space_multi    
+            fill(255)
+            strokeWeight(1)
+            rect(cornerPlanet_x,cornerPlanet_y,(col*(space_multi/2))*len_th,(row*(space_multi/2))*len_th)
+            x,y = cornerPlanet_x,cornerPlanet_y
+            for i in range(int(0.5*row)):#30
+                for j in range(int(0.5*col)):#40
+                    stroke(0,0,0,255)
+                    rect(x,y,space,space)
+                    x += space
+                y += space
+                x = cornerPlanet_x
+        cornerPlanet_x = (displayWidth*0.5) - (col*(0.0625/2)*len_th)   
+        cornerPlanet_y = (displayHeight*0.5) - (row*(0.25+(0.0625/2))*len_th)  
+        rect(cornerPlanet_x,cornerPlanet_y,(col*(0.125/2))*len_th,(row*0.0625)*len_th)
 
-    rect(cornerPlanet_x,cornerPlanet_y,(col*(0.125/2))*len_th,(row*0.0625)*len_th)
-    
-    # cornerPlanet_x = (displayWidth*0.5) - (col*0.125*len_th)    
-    # cornerPlanet_y = (displayHeight*0.5) + (row*0.125*len_th)  
-    # centrePlanet_x = (displayWidth*0.5)
-    # centrePlanet_y = (displayHeight*0.5) + (int(row*0.25)*len_th)
-    # space = len_th*0.5    
-    # fill(255)
-    # strokeWeight(1)
-    # rect(cornerPlanet_x,cornerPlanet_y,(col*0.25)*len_th,(row*0.25)*len_th)
-    # x,y = cornerPlanet_x,cornerPlanet_y
-    # for i in range(int(0.5*row)):#30
-    #     for j in range(int(0.5*col)):#40
-    #         stroke(0,0,0,255)
-    #         rect(x,y,space,space)
-    #         x += space
-    #     y += space
-    #     x = cornerPlanet_x
-        
-    # cornerPlanet_x = (displayWidth*0.5) - (col*0.0625*len_th)    
-    # cornerPlanet_y = (displayHeight*0.5) + (row*0.1875*len_th)  
-    # space = len_th*0.25    
-    # rect(cornerPlanet_x,cornerPlanet_y,(col*0.125)*len_th,(row*0.125)*len_th)
-    # x,y = cornerPlanet_x,cornerPlanet_y
-    # for i in range(int(0.5*row)):#30
-    #     for j in range(int(0.5*col)):#40
-    #         stroke(0,0,0,255)
-    #         rect(x,y,space,space)
-    #         x += space
-    #     y += space
-    #     x = cornerPlanet_x    
-
-    # cornerPlanet_x = (displayWidth*0.5) - (col*(0.0625/2)*len_th)   
-    # cornerPlanet_y = (displayHeight*0.5) + (row*(0.1875+(0.0625/2))*len_th)  
-
-    # rect(cornerPlanet_x,cornerPlanet_y,(col*(0.125/2))*len_th,(row*0.0625)*len_th)
-
-
-
-
-
-
-def drawLines(walk_num, step_num, col, row, len_th, mode, begin, Pright, Pleft, Pdown, Pup, Prightdown, Prightup, Pleftdown, Pleftup):
+def drawLines(walk_num, step_num, col, row, len_th, mode, begin, planet, position, Pright, Pleft, Pdown, Pup, Prightdown, Prightup, Pleftdown, Pleftup):
     
     xaverage_array = []
     yaverage_array = []
@@ -174,7 +193,7 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, Pright, Pleft, 
     if mode.lower() == "square":
         
         for num in range(walk_num):
-            
+            space = len_th
             if begin == 1:#start at centre 
                 x = (displayWidth*0.5)
     
@@ -185,9 +204,9 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, Pright, Pleft, 
                 x = (displayWidth*0.5) + ((col*0.5)*len_th)
                 
             xpos = x
-            y = (displayHeight*0.5)
-            
-                    
+            y = (displayHeight*0.5)# + ((col*0.15)*len_th)
+            ypos = y
+
             for j in range(step_num):
                 
                 if x == ((displayWidth*0.5) - ((col*0.5)*len_th)) and y == ((displayHeight*0.5) - ((row*0.5)*len_th)):#this prevent the line going off the grid
@@ -225,22 +244,43 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, Pright, Pleft, 
                     if numbers[i] == 3:
                         for k in range(int(Pup*100)):
                             weights.append(3)
-                    
+                if planet == True:
+                    if position == 1:
+                        if (((displayWidth*0.5) - (col*0.125*len_th)) <= x <= ((displayWidth*0.5) + (col*0.125*len_th))) and (((displayHeight*0.5) + (row*0.125*len_th)) <= y <= ((displayHeight*0.5) + (row*0.375*len_th))):
+                            space = len_th*0.5
+                        if (((displayWidth*0.5) - (col*0.0625*len_th)) <= x <= ((displayWidth*0.5) + (col*0.0625*len_th))) and (((displayHeight*0.5) + (row*0.1875*len_th)) <= y <= ((displayHeight*0.5) + (row*0.325*len_th))):
+                            space = len_th*0.25
+                        if (((displayWidth*0.5) - (col*(0.0625/2)*len_th)) <= x <= ((displayWidth*0.5) + (col*(0.0625/2)*len_th))) and (((displayHeight*0.5) + (row*(0.1875+(0.0625/2))*len_th)) <= y <= ((displayHeight*0.5) + (row*(0.325-(0.0625/2))*len_th))):
+                            space = 0
+                    elif position == 2:
+                        if (((displayWidth*0.5) - (col*0.125*len_th)) <= x <= ((displayWidth*0.5) + (col*0.125*len_th))) and (((displayHeight*0.5) - (row*0.125*len_th)) <= y <= ((displayHeight*0.5) + (row*0.125*len_th))):
+                            space = len_th*0.5
+                        if (((displayWidth*0.5) - (col*0.0625*len_th)) <= x <= ((displayWidth*0.5) + (col*0.0625*len_th))) and (((displayHeight*0.5) - (row*0.0625*len_th)) <= y <= ((displayHeight*0.5) + (row*0.0625*len_th))):
+                            space = len_th*0.25
+                        if (((displayWidth*0.5) - (col*(0.0625/2)*len_th)) <= x <= ((displayWidth*0.5) + (col*(0.0625/2)*len_th))) and (((displayHeight*0.5) - (row*(0.0625/2)*len_th)) <= y <= ((displayHeight*0.5) + (row*(0.0625/2)*len_th))):
+                            space = 0
+                    elif position == 3:
+                        if (((displayWidth*0.5) - (col*0.125*len_th)) <= x <= ((displayWidth*0.5) + (col*0.125*len_th))) and (((displayHeight*0.5) - (row*0.125*len_th)) <= y <= ((displayHeight*0.5) + (row*0.125*len_th))):
+                            space = len_th*0.5
+                        if (((displayWidth*0.5) - (col*0.0625*len_th)) <= x <= ((displayWidth*0.5) + (col*0.0625*len_th))) and (((displayHeight*0.5) - (row*0.0625*len_th)) <= y <= ((displayHeight*0.5) + (row*0.0625*len_th))):
+                            space = len_th*0.25
+                        if (((displayWidth*0.5) - (col*(0.0625/2)*len_th)) <= x <= ((displayWidth*0.5) + (col*(0.0625/2)*len_th))) and (((displayHeight*0.5) - (row*0.25-(0.0625/2)*len_th)) <= y <= ((displayHeight*0.5) + (row*0.25+(0.0625/2)*len_th))):
+                            space = 0
                 number = random.choice(weights)#generates a random number
                 stroke(0)
                 strokeWeight(3)
                 if number == 0:
-                    line(x,y,x+len_th,y)#right
-                    x += len_th
+                    line(x,y,x+space,y)#right
+                    x += space
                 elif number == 1:
-                    line(x,y,x-len_th,y)#left
-                    x -= len_th
+                    line(x,y,x-space,y)#left
+                    x -= space
                 elif number == 2:
-                    line(x,y,x,y+len_th)#down
-                    y += len_th
+                    line(x,y,x,y+space)#down
+                    y += space
                 elif number == 3:
-                    line(x,y,x,y-len_th)#up
-                    y -= len_th
+                    line(x,y,x,y-space)#up
+                    y -= space
 
                 avg.append([x,y])
 
@@ -354,8 +394,8 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, Pright, Pleft, 
             textSize(10)
             text(num+1,x,y)#writes a number to link the line to the walk_num
             
-    averageline1(xaverage_array,yaverage_array,xpos)
-    averageline2(step_num,walk_num,avg,xpos)
+    averageline1(xaverage_array,yaverage_array,xpos,ypos)
+    averageline2(step_num,walk_num,avg,xpos,ypos)
 
     
 def find_nearest_point(find_x,find_y,col,row,coord):
@@ -689,7 +729,7 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Prightdo
     # averageline2(step_num,walk_num,avg,xpos)
 
     
-def averageline1(xaverage_array,yaverage_array,xpos):
+def averageline1(xaverage_array,yaverage_array,xpos,ypos):
         
     sum_of_x,sum_of_y = 0,0
     
@@ -702,12 +742,12 @@ def averageline1(xaverage_array,yaverage_array,xpos):
     
     stroke(255,0,0)
     strokeWeight(3)
-    line(xpos,(displayHeight*0.5),xaverage,yaverage)
+    line(xpos,ypos,xaverage,yaverage)
     
     
-def averageline2(step_num,walk_num,average_array,xpos):
+def averageline2(step_num,walk_num,average_array,xpos,ypos):
     x = xpos
-    y = (displayHeight*0.5)
+    y = ypos
     prevx = x
     prevy = y
     xaverage = []
