@@ -17,10 +17,10 @@ def draw():
     num_of_walks = 100
     begin = 2
     planet = True
-    planet_position = 2
+    planet_position = 1
     name = "Square Grid Planet 2"
-    Pdown = 0.25
-    Pup  = 0.25
+    Pdown = 0.30
+    Pup  = 0.20
     Pright = 0.40
     Pleft = 0.10
     Prightdown = 0.10
@@ -34,8 +34,8 @@ def draw():
     grid(column,row,space,mode, coordinates) 
     if planet == True:
         drawPlanets(column,row,space,planet_position) 
-    # if mode.lower() == "square" or mode.lower() == "triangle":
-    #     drawLines(num_of_walks, num_of_steps, column, row, space, mode, begin, planet, planet_position, Pright, Pleft, Pdown, Pup, Prightdown, Prightup, Pleftdown, Pleftup)
+    if mode.lower() == "square" or mode.lower() == "triangle":
+        drawLines(num_of_walks, num_of_steps, column, row, space, mode, begin, planet, planet_position, Pright, Pleft, Pdown, Pup, Prightdown, Prightup, Pleftdown, Pleftup)
     # elif mode.lower() == "random":
     #    drawLinesRandom(num_of_walks, num_of_steps, column, row, space, begin,coordinates, Pright, Pleft, Pdown, Pup)
     saveFrame("Walk_{}.png".format(name))
@@ -204,9 +204,14 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, planet, positio
                 x = (displayWidth*0.5) + ((col*0.5)*len_th)
                 
             xpos = x
-            y = (displayHeight*0.5)# + ((col*0.15)*len_th)
+            y = (displayHeight*0.5) + ((col*0.15)*len_th)
             ypos = y
-
+            
+            Pright1 = Pright
+            Pleft1 = Pleft
+            Pup1 = Pup
+            Pdown1 = Pdown
+            
             for j in range(step_num):
                 
                 if x == ((displayWidth*0.5) - ((col*0.5)*len_th)) and y == ((displayHeight*0.5) - ((row*0.5)*len_th)):#this prevent the line going off the grid
@@ -229,29 +234,23 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, planet, positio
                 else:
                     numbers = [0,1,2,3]
                 
-                weights = [] 
-                
-                for i in range(len(numbers)):
-                    if numbers[i] == 0:
-                        for k in range(int(Pright*100)):
-                            weights.append(0)
-                    if numbers[i] == 1:
-                        for k in range(int(Pleft*100)):
-                            weights.append(1)
-                    if numbers[i] == 2:
-                        for k in range(int(Pdown*100)):
-                            weights.append(2)
-                    if numbers[i] == 3:
-                        for k in range(int(Pup*100)):
-                            weights.append(3)
                 if planet == True:
                     if position == 1:
                         if (((displayWidth*0.5) - (col*0.125*len_th)) <= x <= ((displayWidth*0.5) + (col*0.125*len_th))) and (((displayHeight*0.5) + (row*0.125*len_th)) <= y <= ((displayHeight*0.5) + (row*0.375*len_th))):
                             space = len_th*0.5
+                            Pright1 = Pright + (0.2*Pleft)
+                            Pleft1 =  (0.8*Pleft)
+                            Pup1 = (0.8*Pup)
+                            Pdown1 = Pdown + (0.2*Pup)
                         if (((displayWidth*0.5) - (col*0.0625*len_th)) <= x <= ((displayWidth*0.5) + (col*0.0625*len_th))) and (((displayHeight*0.5) + (row*0.1875*len_th)) <= y <= ((displayHeight*0.5) + (row*0.325*len_th))):
                             space = len_th*0.25
+                            Pright1 = Pright + (0.4*Pleft)
+                            Pleft1 =  (0.6*Pleft)
+                            Pup1 = (0.6*Pup)
+                            Pdown1 = Pdown + (0.4*Pup)
                         if (((displayWidth*0.5) - (col*(0.0625/2)*len_th)) <= x <= ((displayWidth*0.5) + (col*(0.0625/2)*len_th))) and (((displayHeight*0.5) + (row*(0.1875+(0.0625/2))*len_th)) <= y <= ((displayHeight*0.5) + (row*(0.325-(0.0625/2))*len_th))):
                             space = 0
+
                     elif position == 2:
                         if (((displayWidth*0.5) - (col*0.125*len_th)) <= x <= ((displayWidth*0.5) + (col*0.125*len_th))) and (((displayHeight*0.5) - (row*0.125*len_th)) <= y <= ((displayHeight*0.5) + (row*0.125*len_th))):
                             space = len_th*0.5
@@ -266,6 +265,21 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, planet, positio
                             space = len_th*0.25
                         if (((displayWidth*0.5) - (col*(0.0625/2)*len_th)) <= x <= ((displayWidth*0.5) + (col*(0.0625/2)*len_th))) and (((displayHeight*0.5) - (row*0.25-(0.0625/2)*len_th)) <= y <= ((displayHeight*0.5) + (row*0.25+(0.0625/2)*len_th))):
                             space = 0
+                weights = [] 
+                
+                for i in range(len(numbers)):
+                    if numbers[i] == 0:
+                        for k in range(int(Pright1*100)):
+                            weights.append(0)
+                    if numbers[i] == 1:
+                        for k in range(int(Pleft1*100)):
+                            weights.append(1)
+                    if numbers[i] == 2:
+                        for k in range(int(Pdown1*100)):
+                            weights.append(2)
+                    if numbers[i] == 3:
+                        for k in range(int(Pup1*100)):
+                            weights.append(3)
                 number = random.choice(weights)#generates a random number
                 stroke(0)
                 strokeWeight(3)
