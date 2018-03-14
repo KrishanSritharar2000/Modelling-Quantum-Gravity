@@ -2,6 +2,7 @@
 
 #Random Walks 
 import random
+import time
 
 def setup():
     fullScreen()
@@ -10,17 +11,17 @@ def setup():
 def draw():
 
     column = 80
-    row = 72
+    row = 80
     space = 10
-    mode = "square"     #"square","triangle","random"
+    mode = "random"     #"square","triangle","random"
     num_of_steps = 250
-    num_of_walks = 100
+    num_of_walks = 150
     begin = 2
-    planet = True
+    planet = False
     planet_position = 1
-    name = "Square Grid Planet 2"
-    Pdown = 0.30
-    Pup  = 0.20
+    name = "Random Grid 13"
+    Pdown = 0.25
+    Pup  = 0.25
     Pright = 0.40
     Pleft = 0.10
     Prightdown = 0.10
@@ -30,15 +31,18 @@ def draw():
     
     coordinates = []
     # coordinates_dict = NearestDict(2)
-     
+    
+    start_ = time.time()
     grid(column,row,space,mode, coordinates) 
     if planet == True:
         drawPlanets(column,row,space,planet_position) 
     if mode.lower() == "square" or mode.lower() == "triangle":
         drawLines(num_of_walks, num_of_steps, column, row, space, mode, begin, planet, planet_position, Pright, Pleft, Pdown, Pup, Prightdown, Prightup, Pleftdown, Pleftup)
-    # elif mode.lower() == "random":
-    #    drawLinesRandom(num_of_walks, num_of_steps, column, row, space, begin,coordinates, Pright, Pleft, Pdown, Pup)
+    elif mode.lower() == "random":
+       drawLinesRandom(num_of_walks, num_of_steps, column, row, space, begin,coordinates, Pright, Pleft, Pdown, Pup)
     saveFrame("Walk_{}.png".format(name))
+    end_ = time.time()
+    print( "The total time taken to simulate was: ", round(end_-start_,2))
 
 
 def grid(col, row, len_th, mode, coordinates):
@@ -193,7 +197,7 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, planet, positio
     if mode.lower() == "square":
         
         for num in range(walk_num):
-            space = len_th
+            
             if begin == 1:#start at centre 
                 x = (displayWidth*0.5)
     
@@ -204,16 +208,20 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, planet, positio
                 x = (displayWidth*0.5) + ((col*0.5)*len_th)
                 
             xpos = x
-            y = (displayHeight*0.5) + ((col*0.15)*len_th)
+#            y = ((displayHeight*0.5) + (col*0.136*len_th))
+            y = (displayHeight*0.5)
             ypos = y
             
-            Pright1 = Pright
-            Pleft1 = Pleft
-            Pup1 = Pup
-            Pdown1 = Pdown
+
             
             for j in range(step_num):
                 
+                Pright1 = Pright
+                Pleft1 = Pleft
+                Pup1 = Pup
+                Pdown1 = Pdown
+                space = len_th
+
                 if x == ((displayWidth*0.5) - ((col*0.5)*len_th)) and y == ((displayHeight*0.5) - ((row*0.5)*len_th)):#this prevent the line going off the grid
                     numbers = [0,2]
                 elif x == ((displayWidth*0.5) - ((col*0.5)*len_th)) and y ==  ((displayHeight*0.5) + ((row*0.5)*len_th)):
@@ -236,20 +244,36 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, planet, positio
                 
                 if planet == True:
                     if position == 1:
-                        if (((displayWidth*0.5) - (col*0.125*len_th)) <= x <= ((displayWidth*0.5) + (col*0.125*len_th))) and (((displayHeight*0.5) + (row*0.125*len_th)) <= y <= ((displayHeight*0.5) + (row*0.375*len_th))):
-                            space = len_th*0.5
-                            Pright1 = Pright + (0.2*Pleft)
-                            Pleft1 =  (0.8*Pleft)
-                            Pup1 = (0.8*Pup)
-                            Pdown1 = Pdown + (0.2*Pup)
-                        if (((displayWidth*0.5) - (col*0.0625*len_th)) <= x <= ((displayWidth*0.5) + (col*0.0625*len_th))) and (((displayHeight*0.5) + (row*0.1875*len_th)) <= y <= ((displayHeight*0.5) + (row*0.325*len_th))):
-                            space = len_th*0.25
-                            Pright1 = Pright + (0.4*Pleft)
-                            Pleft1 =  (0.6*Pleft)
-                            Pup1 = (0.6*Pup)
-                            Pdown1 = Pdown + (0.4*Pup)
-                        if (((displayWidth*0.5) - (col*(0.0625/2)*len_th)) <= x <= ((displayWidth*0.5) + (col*(0.0625/2)*len_th))) and (((displayHeight*0.5) + (row*(0.1875+(0.0625/2))*len_th)) <= y <= ((displayHeight*0.5) + (row*(0.325-(0.0625/2))*len_th))):
-                            space = 0
+                        if (((displayWidth*0.5) - (col*0.125*len_th)) < x < ((displayWidth*0.5) + (col*0.125*len_th))):
+                            if (((displayHeight*0.5) + (row*0.125*len_th)) < y < ((displayHeight*0.5) + (row*0.375*len_th))):
+                                space = len_th*0.5
+                                if y >= ((displayHeight*0.5) - (row*0.25*len_th)):
+#                                    # Pright1 = Pright + (0.2*Pleft)
+#                                   # Pleft1 =  (0.8*Pleft)
+                                    Pup1 = (0.8*Pup)
+                                    Pdown1 = Pdown + (0.2*Pup)
+                                else:
+#                                    # Pright1 = Pright + (0.2*Pleft)
+#                                    # Pleft1 =  (0.8*Pleft)
+                                    Pdown1 = (0.8*Pdown)
+                                    Pup1 = Pup + (0.2*Pdown)
+                                    
+                        if (((displayWidth*0.5) - (col*0.0625*len_th)) < x < ((displayWidth*0.5) + (col*0.0625*len_th))):
+                            if (((displayHeight*0.5) + (row*0.1875*len_th)) < y < ((displayHeight*0.5) + (row*0.325*len_th))):
+                                space = len_th*0.25
+                                if y >= ((displayHeight*0.5) - (row*0.25*len_th)):
+ #                                   # Pright1 = Pright + (0.4*Pleft)
+ #                                   # Pleft1 =  (0.6*Pleft)
+                                    Pup1 = (0.6*Pup)
+                                    Pdown1 = Pdown + (0.4*Pup)
+                                else:
+ #                                   # Pright1 = Pright + (0.4*Pleft)
+ #                                   # Pleft1 =  (0.6*Pleft)
+                                    Pdown1 = (0.6*Pdown)
+                                    Pup1 = Pup + (0.4*Pdown)
+                        if (((displayWidth*0.5) - (col*0.03125*len_th)) <= x <= ((displayWidth*0.5) + (col*0.03125*len_th))):
+                            if (((displayHeight*0.5) + (row*0.21875*len_th)) <= y <= ((displayHeight*0.5) + (row*0.29375*len_th))):
+                                space = 0
 
                     elif position == 2:
                         if (((displayWidth*0.5) - (col*0.125*len_th)) <= x <= ((displayWidth*0.5) + (col*0.125*len_th))) and (((displayHeight*0.5) - (row*0.125*len_th)) <= y <= ((displayHeight*0.5) + (row*0.125*len_th))):
@@ -282,7 +306,7 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, planet, positio
                             weights.append(3)
                 number = random.choice(weights)#generates a random number
                 stroke(0)
-                strokeWeight(3)
+                strokeWeight(2)
                 if number == 0:
                     line(x,y,x+space,y)#right
                     x += space
@@ -298,7 +322,7 @@ def drawLines(walk_num, step_num, col, row, len_th, mode, begin, planet, positio
 
                 avg.append([x,y])
 
-            print("Average = ",avg)
+            # print("Average = ",avg)
             
             stroke(0)
             strokeWeight(3)
@@ -531,7 +555,8 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Prightdo
         x = (displayWidth*0.5) + ((col*0.5)*len_th)
         
     xpos = x
-    y = (displayHeight*0.5)        
+    y = (displayHeight*0.5)
+    ypos = y        
     
     nearest_coord = find_nearest_point(xpos,y,col,row,coord)
     stroke(255,0,0,100)
@@ -545,7 +570,7 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Prightdo
     avg = []
         
     for num in range(walk_num):
-
+        print("NEW WHOLE LOOP")
         # result = find_points(x,y,index,coord,col,row)
         x,y = nearest_coord[0],nearest_coord[1]
         print("x",x)
@@ -557,9 +582,10 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Prightdo
         leftup_count,rightup_count,leftdown_count,rightdown_count = 0,0,0,0
         leftup_array,rightup_array,leftdown_array,rightdown_array = [],[],[],[]
         max_count = int(round(sqrt(row*col)/2,0))
+        # max_count = 1
         dist_x,dist_y,diagonal_dist,numbers = [],[],[],[]
         # points_removed = 1
-        for i in range(col*row-1):
+        for i in range((col*row)-1):
             dist_x.append(abs(coord[i][0] - x))
             dist_y.append(abs(coord[i][1] - y))
             diagonal_dist.append(round(sqrt(dist_x[i]**2 + dist_y[i]**2),2))
@@ -571,16 +597,23 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Prightdo
                                 
         for j in range(step_num):
             
-            prevx,prevy = x,y
+            prevx,prevy,prev_temp_min = x,y,0
             
             
-            while (leftup == False or rightup == False or leftdown == False or rightdown == False) and loops < (col*row*2):
+            while (leftup == False or rightup == False or leftdown == False or rightdown == False) and loops < (int((col*row))):
+                print("new while loop")
                 temp_min = min(diagonal_dist)
+                if prev_temp_min == temp_min:
+                    temp_min_index = diagonal_dist.index(temp_min)
+                    diagonal_dist.pop(temp_min_index)
+                    diagonal_dist.insert(temp_min_index,(max_value*1000))
+                    temp_min = min(diagonal_dist)
                 print("tempmin",temp_min)
                 temp_min_index = diagonal_dist.index(temp_min)
                 print("tempminindex", temp_min_index)
-                if leftup_count < max_count:
-                    if coord[temp_min_index][0] < x and coord[temp_min_index][1] < y:#to the left and up
+                print("tempminx",coord[temp_min_index][0],"tempminy",coord[temp_min_index][1])
+                if coord[temp_min_index][0] < x and coord[temp_min_index][1] < y:#to the left and up
+                    if leftup_count < max_count:
                         leftup = True
                         leftup_count +=1
                         print("leftup_count",leftup_count)
@@ -588,8 +621,8 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Prightdo
                         numbers.append(0)
                         diagonal_dist.pop(temp_min_index)
                         diagonal_dist.insert(temp_min_index,(max_value*1000))
-                if rightup_count < max_count:
-                    if coord[temp_min_index][0] > x and coord[temp_min_index][1] < y:#to the left and up
+                elif coord[temp_min_index][0] > x and coord[temp_min_index][1] < y:#to the left and up
+                    if rightup_count < max_count:
                         rightup = True
                         rightup_count +=1
                         print("rightup_count",rightup_count)
@@ -597,8 +630,8 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Prightdo
                         numbers.append(1)
                         diagonal_dist.pop(temp_min_index)   
                         diagonal_dist.insert(temp_min_index,(max_value*1000))
-                if leftdown_count < max_count:
-                    if coord[temp_min_index][0] < x and coord[temp_min_index][1] > y:#to the left and up
+                elif coord[temp_min_index][0] < x and coord[temp_min_index][1] > y:#to the left and up
+                    if leftdown_count < max_count:
                         leftdown = True
                         leftdown_count +=1
                         print("leftdown_count",leftdown_count)
@@ -606,8 +639,8 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Prightdo
                         numbers.append(2)
                         diagonal_dist.pop(temp_min_index)
                         diagonal_dist.insert(temp_min_index,(max_value*1000))
-                if rightdown_count < max_count:
-                    if coord[temp_min_index][0] > x and coord[temp_min_index][1] > y:#to the left and up
+                elif coord[temp_min_index][0] > x and coord[temp_min_index][1] > y:#to the left and up
+                    if rightdown_count < max_count:
                         rightdown = True
                         rightdown_count +=1
                         print("rightdown_count",rightdown_count)
@@ -615,6 +648,7 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Prightdo
                         numbers.append(3)
                         diagonal_dist.pop(temp_min_index)
                         diagonal_dist.insert(temp_min_index,(max_value*1000))
+                prev_temp_min = temp_min
                 loops += 1
                 print()
                 print("New",diagonal_dist)
@@ -623,6 +657,7 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Prightdo
                 print("rightup_array ",rightup_array)
                 print("leftdown_array ",leftdown_array)
                 print("rightdown_array ",rightdown_array)
+            print("While finish")
             if len(leftup_array) == 0:
                 leftup_array = [()]
             if len(rightup_array) == 0:
@@ -649,30 +684,32 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Prightdo
                 if temp_count > 1:
                     for j in range(temp_count-1):
                         multiple_numbers.append(i)
-                        print("multi numbers",multiple_numbers)
+                        print("multi numbers1",multiple_numbers)
                         numbers.remove(i)
                 print("NumBers", numbers)
-                print("multi numbers",multiple_numbers)
+                print("multi numbers2",multiple_numbers)
             weights = [] 
             
-            for i in range(len(numbers)):
-                if numbers[i] == 0:
+            for l in range(len(numbers)):
+                if numbers[l] == 0:
                     for k in range(int(Pleftup*100)):
                         weights.append(0)
-                if numbers[i] == 1:
+                if numbers[l] == 1:
                     for k in range(int(Prightup*100)):
                         weights.append(1)
-                if numbers[i] == 2:
+                if numbers[l] == 2:
                     for k in range(int(Pleftdown*100)):
                         weights.append(2)
-                if numbers[i] == 3:
+                if numbers[l] == 3:
                     for k in range(int(Prightdown*100)):
                         weights.append(3)
-                
+            print("Wegihts: ",weights)    
             
             number = random.choice(weights)#generates a random number
             stroke(0,0,0,105)
             strokeWeight(3)
+            print("Random number :", number)
+            print("The length of numbers",  len(numbers))
             print("leftup",leftup_array)
             print("rightup",rightup_array)
             print("leftdown",leftdown_array)
@@ -681,10 +718,15 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Prightdo
             print("prevy", prevy)
             stroke(0,0,0,100)
             if len(numbers) == 0:
+                print("Exectued len numbers ==0")
                 temp_amount_random_number = int(random.randint(0, col*row-1))
                 line(prevx,prevy,coord[temp_amount_random_number][0],coord[temp_amount_random_number][1])
             elif number == 0:#leftup
+                print("Exectued numbers ==0")
+
                 if multiple_numbers.count(0) == 0:
+                    print("Exectued numbers ==0 and multiple number count = 0")
+
                     # print("AAAAAA",prevx,prevy,leftup_array[0],leftup_array[1])
                     stroke(0,0,0,100)
                     line(prevx,prevy,leftup_array[0][0],leftup_array[0][1])
@@ -696,7 +738,11 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Prightdo
                     line(prevx,prevy,leftup_array[temp_amount_random_number][0],leftup_array[temp_amount_random_number][1])
                     x,y = leftup_array[temp_amount_random_number][0],leftup_array[temp_amount_random_number][1]            
             elif number == 1:#rightup
+                print("Exectued numbers ==1")
+
                 if multiple_numbers.count(1) == 0:
+                    print("Exectued numbers ==1 and multiple number count = 0")
+
                     # print("BBBBBB",prevx,prevy,rightup_array[0],rightup_array[1])
                     stroke(0,0,0,100)
                     line(prevx,prevy,rightup_array[0][0],rightup_array[0][1])
@@ -708,7 +754,11 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Prightdo
                     line(prevx,prevy,rightup_array[temp_amount_random_number][0],rightup_array[temp_amount_random_number][1])
                     x,y = rightup_array[temp_amount_random_number][0],rightup_array[temp_amount_random_number][1] 
             elif number == 2:#leftdown
+                print("Exectued numbers ==2")
+
                 if multiple_numbers.count(2) == 0:
+                    print("Exectued numbers ==2 and multiple number count = 0")
+
                     # print("CCCCCC",prevx,prevy,leftdown_array[0],leftdown_array[1])
                     stroke(0,0,0,100)
                     line(prevx,prevy,leftdown_array[0][0],leftdown_array[0][1])
@@ -720,7 +770,11 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Prightdo
                     line(prevx,prevy,leftdown_array[temp_amount_random_number][0],leftdown_array[temp_amount_random_number][1])
                     x,y = leftdown_array[temp_amount_random_number][0],leftdown_array[temp_amount_random_number][1] 
             elif number == 3:#rightdown
+                print("Exectued numbers ==3")
+
                 if multiple_numbers.count(3) == 0:
+                    print("Exectued numbers ==3 and multiple number count = 0")
+
                     # print("DDDDDDDD", prevx,prevy,rightdown_array[0],rightdown_array[1])
                     stroke(0,0,0,100)
                     line(prevx,prevy,rightdown_array[0][0],rightdown_array[0][1])
@@ -732,15 +786,16 @@ def drawLinesRandom(walk_num, step_num, col, row, len_th, begin, coord, Prightdo
                     line(prevx,prevy,rightdown_array[temp_amount_random_number][0],rightdown_array[temp_amount_random_number][1])
                     x,y = rightdown_array[temp_amount_random_number][0],rightdown_array[temp_amount_random_number][1] 
                      
-        avg.append([x,y])        
-    xaverage_array.append(x)
-    yaverage_array.append(y)
+            avg.append([x,y])
+        fill(0,255,0)
+        textSize(14)
+        text(num+1,x,y)        
+        xaverage_array.append(x)
+        yaverage_array.append(y)
 
-    fill(0)
-    textSize(10)
-    text(num+1,x,y)#writes a number to link the line to the walk_num
-    # averageline1(xaverage_array,yaverage_array,xpos)
-    # averageline2(step_num,walk_num,avg,xpos)
+#writes a number to link the line to the walk_num
+    averageline1(xaverage_array,yaverage_array,xpos,ypos)
+    averageline2(step_num,walk_num,avg,xpos,ypos)
 
     
 def averageline1(xaverage_array,yaverage_array,xpos,ypos):
@@ -766,6 +821,7 @@ def averageline2(step_num,walk_num,average_array,xpos,ypos):
     prevy = y
     xaverage = []
     yaverage = []
+    
     for i in range(step_num*walk_num):
         xaverage.append(average_array[i][0])
         yaverage.append(average_array[i][1])
@@ -773,7 +829,7 @@ def averageline2(step_num,walk_num,average_array,xpos,ypos):
     for j in range(step_num):
         xaverage_t = xaverage[j::step_num]
         yaverage_t = yaverage[j::step_num]
-        print("Xaverage_t:", xaverage_t)
+        # print("Xaverage_t:", xaverage_t)
         
         sum_of_x,sum_of_y = 0,0
 
@@ -788,3 +844,4 @@ def averageline2(step_num,walk_num,average_array,xpos,ypos):
         line(prevx,prevy,temp_xaverage,temp_yaverage)
         prevx = temp_xaverage
         prevy = temp_yaverage
+    # print("This is the average_array", average_array)
