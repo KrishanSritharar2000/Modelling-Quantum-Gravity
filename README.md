@@ -1,1 +1,8 @@
 # Modelling-Quantum-Gravity
+
+A Gold CREST Award Project on "Developing Computational Methods of Modelling Quantum Gravity". Created a Monte Carlo simulation using Python and Processing (a graphical library) to model light travelling through deep space. A 7-month group project run from December 2017 to June 2018, with a presentation at the Blackett Laboratory, Imperial College London in September 2018. 
+
+Square, isometric and randomly generated grids were used to represent the deep space the light is travelling through. Experimented with different probabilities of the light moving in each direction. Generated, plotted and analysed the results to evaluate the models. Added gravitational models of planets to represent masses and experimented with how the direction of light is affected when travelling past them. As expected, the light bent towards the planet, with a stronger attraction depending on how close it gets to the planet.
+
+To conclude, the project was a success. We built a working model of discrete space-time that is scalable and optimized. Through iterative development and transitioning to using Processing, the execution time of a long simulation at one point in the project was reduced from 11 minutes to 16 seconds. We had different types of grids, masses with denser gravitational fields, varying number of steps for light and different probabilities of it moving in each direction to reflect upon the true randomness. The results we collected at the end supported our hypothesis, with the average and moving average lines playing a key part in expressing this graphically. 
+
