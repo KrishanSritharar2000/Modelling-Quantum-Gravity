@@ -1,4 +1,4 @@
-# Modelling-Quantum-Gravity
+# Modelling Quantum Gravity
 
 A Gold CREST Award Project on "Developing Computational Methods of Modelling Quantum Gravity". Created a Monte Carlo simulation using Python and Processing (a graphical library) to model light travelling through deep space. A 7-month group project run from December 2017 to June 2018, with a presentation at the Blackett Laboratory, Imperial College London in September 2018. 
 
@@ -6,3 +6,33 @@ Square, isometric and randomly generated grids were used to represent the deep s
 
 To conclude, the project was a success. We built a working model of discrete space-time that is scalable and optimized. Through iterative development and transitioning to using Processing, the execution time of a long simulation at one point in the project was reduced from 11 minutes to 16 seconds. We had different types of grids, masses with denser gravitational fields, varying number of steps for light and different probabilities of it moving in each direction to reflect upon the true randomness. The results we collected at the end supported our hypothesis, with the average and moving average lines playing a key part in expressing this graphically. 
 
+# How to run
+
+To run the simulation yourself, use the latest version of the simulation in [Simulation.pyde](../main/Simulation.pyde). 
+Simply clone the repository and open the file in Processing, which you can download [here](https://processing.org/download/)
+
+Next, set the required parameters:
+```
+* column:           Number of columns
+* row:              Number of rows
+* space:            Pixels between columns/rows
+* mode:             Either "square", "triangle" or "random"
+* num_of_steps:     Number of steps to perform in each walk
+* num_of_walks:     Number of walks to perform 
+* begin:            Start position either: 1 -> Center, 2 -> Left, 3 -> Right
+* planet:           True/False on whether to include planets
+* planet_position:  Position of planet on grid (default 1)
+* name:             Name of image screenshot taken of final simulation state
+* Pdown:            Probability of going South      (square)
+* Pup:              Probability of going North      (square)
+* Pright:           Probability of going East       (square/triangle)
+* Pleft:            Probability of going West       (square/triangle)
+* Prightdown:       Probability of going South-East (triangle)
+* Prightup:         Probability of going North-East (triangle)
+* Pleftdown:        Probability of going South-West (triangle)
+* Pleftup:          Probability of going North-West (triangle)
+* startsearch:      Position to start average line
+* searchX:          Steps to use in computing average line
+```
+
+Finally, simply run the code in Processing and you will be presented with a simulation. 
