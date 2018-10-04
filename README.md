@@ -36,3 +36,17 @@ Next, set the required parameters:
 ```
 
 Finally, simply run the code in Processing and you will be presented with a simulation. 
+
+---
+
+# Results from Simulation
+
+Here are some videos showing the results from the simulation, each with a different set of parameters for investigating different objectives. 
+
+## Square Grid, start at Center with Equal probability of all directions
+
+<img src="https://user-images.githubusercontent.com/57354504/125507978-a979945e-5c6a-4cec-a47b-b4cba9e65830.gif" alt="Animation Sqaure Equal" height="270"/> <img src="https://user-images.githubusercontent.com/57354504/125507385-1a48a3f2-bff3-4fcd-ba78-f38e1f1e39ed.png" alt="standard deviation" height="270"/>
+
+## Square Grid, start at Right With biased Right probability 
+
+<img src="https://user-images.githubusercontent.com/57354504/125511614-511f5843-d278-4ddf-8c4b-901eda726c91.gif" alt="Animation Sqaure Right" height="270"/> <img src="https://user-images.githubusercontent.com/57354504/125511932-ec5ab649-0418-49d5-ad1b-91176ab6afa4.png" alt="mean distance" height="270"/>
