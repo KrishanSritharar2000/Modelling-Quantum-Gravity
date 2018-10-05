@@ -50,3 +50,15 @@ Here are some videos showing the results from the simulation, each with a differ
 ## Square Grid, start at Right With biased Right probability 
 
 <img src="https://user-images.githubusercontent.com/57354504/125511614-511f5843-d278-4ddf-8c4b-901eda726c91.gif" alt="Animation Sqaure Right" height="270"/> <img src="https://user-images.githubusercontent.com/57354504/125511932-ec5ab649-0418-49d5-ad1b-91176ab6afa4.png" alt="mean distance" height="270"/>
+
+## Isometric Grid, start at Center with Equal probability of all directions
+
+<img src="https://user-images.githubusercontent.com/57354504/125526494-9098da7c-bd95-4193-a3ce-01300e1362bb.gif" alt="Animation Sqaure Right" height="260"/> <img src="https://user-images.githubusercontent.com/57354504/125525800-c9989102-71ac-48fc-b30d-5690c44e4d57.png" alt="log standard deviation" height="260"/>
+
+## Random Grid
+
+<img src="https://user-images.githubusercontent.com/57354504/125527276-3517f514-4828-41f4-b8cd-ffa2cba8b5e8.png" alt="random" height="270"/>
+
+## Square Grid with Planet
+
+<img src="https://user-images.githubusercontent.com/57354504/125527503-71c1b47f-ac93-435e-9489-b99112d4ae1b.gif" alt="Planet" height="270"/>
